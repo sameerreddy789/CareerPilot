@@ -152,9 +152,13 @@ function generateDynamicModulesFromItems(topicName, items, role, difficulty = 'i
         const moduleItems = items.slice(start, start + itemsPerModule);
         if (moduleItems.length === 0) break;
 
-        const moduleTitle = moduleCount <= 2
-            ? (i === 0 ? 'Fundamentals' : 'Advanced Concepts')
-            : `Module ${i + 1}: ${moduleItems[0]}+`;
+        // Generate descriptive title from content
+        let moduleTitle;
+        if (moduleCount === 2) {
+            moduleTitle = i === 0 ? `${topicName} — Core Concepts` : `${topicName} — Applied & Advanced`;
+        } else {
+            moduleTitle = `${moduleItems[0]}${moduleItems.length > 1 ? ' & Related' : ''}`;
+        }
 
         modules.push({
             title: moduleTitle,
@@ -180,17 +184,8 @@ function normalizeTopicModules(topic, role) {
     const difficulty = topic.difficulty || 'intermediate';
     const isCore = topic.isCore || isCoreTopic(topic.name, role);
 
-    // Case 1: AI provided proper modules array
+    // Case 1: AI provided proper modules array — trust the AI's module count
     if (topic.modules && Array.isArray(topic.modules) && topic.modules.length > 0) {
-        // Validate module count against rules
-        const totalSubtopics = topic.modules.reduce((sum, m) => sum + (m.subtopics?.length || 0), 0);
-        const expectedCount = calculateModuleCount(totalSubtopics, difficulty, isCore);
-
-        // If AI gave too few modules, we accept what it gave but log it
-        if (topic.modules.length < expectedCount) {
-            console.log(`[RoadmapEngine] ⚠️ Topic "${topic.name}" has ${topic.modules.length} modules, expected ${expectedCount}. Accepting AI output.`);
-        }
-
         // Normalize each module to ensure all fields exist
         return topic.modules.map(mod => ({
             title: mod.title || 'Untitled Module',

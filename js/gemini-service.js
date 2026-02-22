@@ -795,26 +795,32 @@ Instructions:
 -   **Weeks 3-${Math.floor(totalWeeks / 2)}**: Core Competency & Market "Must-Haves".
 -   **Weeks ${Math.floor(totalWeeks / 2) + 1}-${totalWeeks}**: Advanced Projects & Specialization.
 
-DYNAMIC MODULE SYSTEM:
-Each topic MUST contain multiple modules. The number of modules depends on topic complexity:
-- Simple topics (≤4 subtopics total): 2 modules
-- Medium topics (5-8 subtopics): 3 modules
-- Complex topics (9-12 subtopics): 4 modules
-- Very complex topics (13+): 5-6 modules
-- If the role is Advanced level: add 1 extra module per topic
-- Core skills for the role: minimum 3 modules
+DYNAMIC MODULE SYSTEM — CRITICAL RULES:
+Each topic MUST contain modules that represent meaningful learning stages. The AI must determine the right number of modules based on topic depth and complexity. DO NOT use a fixed number.
+
+Guidelines for module count:
+- A narrow, focused topic (e.g. "Bit Manipulation") might need only 2 modules.
+- A standard topic (e.g. "Stacks & Queues") might need 3-4 modules.
+- A deep, multi-faceted topic (e.g. "Dynamic Programming", "System Design", "React Ecosystem") should have 5-8+ modules.
+- Each module must represent a distinct learning stage, NOT an arbitrary split.
+- Modules should flow logically: Fundamentals → Core Concepts → Applied Patterns → Advanced Techniques → Real-World Practice.
+- NEVER create generic modules like just "Fundamentals" + "Advanced". Each module title must be specific and descriptive.
 
 Each module MUST contain:
-- "title": descriptive module name
-- "subtopics": array of 3-6 specific learning items
-- "practiceProblems": array of 5 practice problem titles (for technical topics) or empty array
+- "title": specific, descriptive module name (e.g. "Tree Traversal Patterns" not "Module 1")
+- "subtopics": array of specific learning items. The count should match the module's scope:
+  - A focused module: 2-4 subtopics
+  - A broad module: 5-8 subtopics
+- "practiceProblems": array of 3-8 practice problem titles (for technical topics) or empty array. More problems for core/complex topics.
 - "youtubeQueries": array of 2 YouTube search queries for learning
-- "deadline": estimated completion time (e.g. "3 days", "1 week")
+- "deadline": estimated completion time based on actual content depth (e.g. "2 days", "5 days", "1 week")
 - "tasks": array of 2-4 daily actionable tasks
 
 For EACH topic, also provide:
 - "isCore": boolean, true if this is a core skill for the ${targetRole} role
 - "difficulty": "beginner", "intermediate", or "advanced"
+
+IMPORTANT: The roadmap must feel like a real curriculum designed by an expert mentor. Each topic should have as many modules as it genuinely needs — no artificial limits, no padding. A topic like "Dynamic Programming" deserves 6-8 modules (Intro to DP, 1D DP, 2D DP, Knapsack Variants, String DP, Tree DP, Advanced DP Patterns, Contest-level DP). A topic like "Bit Manipulation" only needs 2 modules.
 
 Respond with ONLY a JSON array (no markdown):
 [
@@ -829,20 +835,36 @@ Respond with ONLY a JSON array (no markdown):
                 "difficulty": "intermediate",
                 "modules": [
                     {
-                        "title": "Fundamentals & Traversal",
-                        "subtopics": ["Singly Linked List", "Doubly Linked List", "Circular Linked List"],
-                        "practiceProblems": ["Reverse a Linked List", "Detect Cycle", "Merge Two Sorted Lists", "Remove Nth Node", "Find Middle Element"],
-                        "youtubeQueries": ["linked list fundamentals tutorial", "linked list implementation step by step"],
-                        "deadline": "3 days",
-                        "tasks": ["Implement singly linked list from scratch", "Solve 3 easy linked list problems", "Watch traversal tutorial"]
+                        "title": "Singly Linked List Fundamentals",
+                        "subtopics": ["Node structure & pointers", "Insertion (head, tail, middle)", "Deletion & search", "Time complexity analysis"],
+                        "practiceProblems": ["Reverse a Linked List", "Delete Node in a Linked List", "Remove Duplicates"],
+                        "youtubeQueries": ["singly linked list implementation from scratch", "linked list basics for beginners"],
+                        "deadline": "2 days",
+                        "tasks": ["Implement singly linked list from scratch", "Solve 3 easy problems on LeetCode"]
                     },
                     {
-                        "title": "Advanced Patterns",
-                        "subtopics": ["Two Pointer Technique", "Fast & Slow Pointers", "Merge Sort on Lists"],
-                        "practiceProblems": ["Palindrome Linked List", "Intersection of Two Lists", "Sort List", "Reorder List", "Copy List with Random Pointer"],
-                        "youtubeQueries": ["linked list interview patterns", "advanced linked list problems"],
+                        "title": "Doubly & Circular Lists",
+                        "subtopics": ["Doubly linked list operations", "Circular linked list", "LRU Cache using DLL"],
+                        "practiceProblems": ["Design LRU Cache", "Flatten a Multilevel DLL", "Insert into Sorted Circular List"],
+                        "youtubeQueries": ["doubly linked list tutorial", "LRU cache linked list implementation"],
+                        "deadline": "2 days",
+                        "tasks": ["Implement doubly linked list", "Build LRU Cache from scratch"]
+                    },
+                    {
+                        "title": "Two-Pointer & Fast-Slow Patterns",
+                        "subtopics": ["Floyd's cycle detection", "Finding middle element", "Intersection of two lists", "Palindrome check"],
+                        "practiceProblems": ["Linked List Cycle II", "Find Middle of Linked List", "Intersection of Two Lists", "Palindrome Linked List", "Remove Nth Node From End"],
+                        "youtubeQueries": ["linked list two pointer technique", "floyd cycle detection explained"],
+                        "deadline": "3 days",
+                        "tasks": ["Master Floyd's algorithm", "Solve 5 medium problems", "Review all patterns"]
+                    },
+                    {
+                        "title": "Advanced Operations & Merge Patterns",
+                        "subtopics": ["Merge two sorted lists", "Merge K sorted lists", "Sort a linked list (merge sort)", "Reorder list", "Copy list with random pointer"],
+                        "practiceProblems": ["Merge K Sorted Lists", "Sort List", "Reorder List", "Copy List with Random Pointer", "Reverse Nodes in K-Group"],
+                        "youtubeQueries": ["merge k sorted lists heap approach", "advanced linked list interview problems"],
                         "deadline": "4 days",
-                        "tasks": ["Master two-pointer technique", "Solve 3 medium linked list problems", "Review and revise"]
+                        "tasks": ["Implement merge sort on linked list", "Solve 4 hard problems", "Mock interview practice"]
                     }
                 ]
             }

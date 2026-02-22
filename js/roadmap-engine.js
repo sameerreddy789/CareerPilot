@@ -8,25 +8,25 @@ const ROLE_TOPICS = {
         {
             title: 'HTML & CSS Mastery',
             topics: [
-                { name: 'Semantic HTML', items: ['Accessibility', 'SEO Tags', 'Form Validation'] },
-                { name: 'Modern CSS', items: ['Flexbox', 'Grid', 'Custom Properties (Variables)'] },
-                { name: 'CSS Architecture', items: ['BEM', 'SASS/SCSS', 'Utility-first'] }
+                { name: 'Semantic HTML', items: ['Accessibility (ARIA)', 'SEO Tags', 'Form Validation', 'HTML5 APIs', 'Web Components Basics'] },
+                { name: 'Modern CSS', items: ['Flexbox', 'Grid', 'Custom Properties (Variables)', 'Container Queries', 'Animations & Transitions', 'Responsive Design'] },
+                { name: 'CSS Architecture', items: ['BEM', 'SASS/SCSS', 'Utility-first (Tailwind)', 'CSS Modules', 'PostCSS'] }
             ]
         },
         {
             title: 'JavaScript Deep Dive',
             topics: [
-                { name: 'Core Concepts', items: ['Closures', 'Prototypal Inheritance', 'ES6+ Features'] },
-                { name: 'Asynchronous JS', items: ['Promises', 'Async/Await', 'Event Loop'] },
-                { name: 'DOM Manipulation', items: ['Event Delegation', 'Performance Optimization'] }
+                { name: 'Core Concepts', items: ['Closures', 'Prototypal Inheritance', 'ES6+ Features', 'Destructuring & Spread', 'Modules (import/export)', 'Symbol & Iterator'] },
+                { name: 'Asynchronous JS', items: ['Promises', 'Async/Await', 'Event Loop', 'Web Workers', 'AbortController', 'Error Handling Patterns'] },
+                { name: 'DOM Manipulation', items: ['Event Delegation', 'Performance Optimization', 'Intersection Observer', 'MutationObserver', 'Virtual DOM Concepts'] }
             ]
         },
         {
             title: 'React Ecosystem',
             topics: [
-                { name: 'React Fundamentals', items: ['Hooks (useState, useEffect)', 'Props & State', 'Components Lifecycle'] },
-                { name: 'State Management', items: ['Context API', 'Redux Toolkit', 'Zustand'] },
-                { name: 'Routing & Performance', items: ['React Router', 'Code Splitting', 'Memoization'] }
+                { name: 'React Fundamentals', items: ['Hooks (useState, useEffect, useRef)', 'Props & State', 'Component Lifecycle', 'Custom Hooks', 'Error Boundaries', 'Suspense & Lazy'] },
+                { name: 'State Management', items: ['Context API', 'Redux Toolkit', 'Zustand', 'React Query / TanStack Query', 'Jotai / Recoil'] },
+                { name: 'Routing & Performance', items: ['React Router v6', 'Code Splitting', 'Memoization (useMemo, useCallback)', 'React Profiler', 'Server Components Basics'] }
             ]
         }
     ],
@@ -34,24 +34,24 @@ const ROLE_TOPICS = {
         {
             title: 'Node.js & Express',
             topics: [
-                { name: 'Server Core', items: ['Event Loop', 'Buffer & Streams', 'File System'] },
-                { name: 'API Design', items: ['RESTful Principles', 'Middleware', 'Error Handling'] },
-                { name: 'Authentication', items: ['JWT', 'OAuth2', 'Passport.js'] }
+                { name: 'Server Core', items: ['Event Loop', 'Buffer & Streams', 'File System', 'Cluster Module', 'Child Processes', 'Environment Variables'] },
+                { name: 'API Design', items: ['RESTful Principles', 'Middleware', 'Error Handling', 'Rate Limiting', 'Versioning', 'Input Validation (Joi/Zod)'] },
+                { name: 'Authentication', items: ['JWT', 'OAuth2', 'Passport.js', 'Session Management', 'RBAC (Role-Based Access)', 'Refresh Tokens'] }
             ]
         },
         {
             title: 'Database & Storage',
             topics: [
-                { name: 'SQL', items: ['PostgreSQL', 'Complex Joins', 'Indexing'] },
-                { name: 'NoSQL', items: ['MongoDB', 'Schema Design', 'Aggregation Pipeline'] },
-                { name: 'Caching', items: ['Redis', 'Cache Invalidation Strategies'] }
+                { name: 'SQL', items: ['PostgreSQL', 'Complex Joins', 'Indexing', 'Stored Procedures', 'Query Optimization', 'Migrations'] },
+                { name: 'NoSQL', items: ['MongoDB', 'Schema Design', 'Aggregation Pipeline', 'Mongoose ODM', 'Sharding Basics', 'TTL Indexes'] },
+                { name: 'Caching', items: ['Redis', 'Cache Invalidation Strategies', 'Pub/Sub with Redis', 'CDN Caching', 'In-Memory Caching Patterns'] }
             ]
         },
         {
             title: 'System & DevOps',
             topics: [
-                { name: 'System Design', items: ['Scalability', 'Load Balancing', 'Microservices'] },
-                { name: 'Docker & CI/CD', items: ['Containerization', 'GitHub Actions', 'Deployment'] }
+                { name: 'System Design', items: ['Scalability', 'Load Balancing', 'Microservices', 'Message Queues (RabbitMQ/Kafka)', 'API Gateway', 'CAP Theorem', 'Database Sharding'] },
+                { name: 'Docker & CI/CD', items: ['Containerization', 'Docker Compose', 'GitHub Actions', 'Deployment Strategies', 'Monitoring & Logging', 'Nginx Reverse Proxy'] }
             ]
         }
     ],
@@ -60,28 +60,29 @@ const ROLE_TOPICS = {
             title: 'Aptitude & Reasoning',
             icon: '🧠',
             topics: [
-                { name: 'Quantitative Aptitude', items: ['Number Systems', 'Percentages & Ratios', 'Time, Speed & Distance'] },
-                { name: 'Logical Reasoning', items: ['Seating Arrangement', 'Blood Relations', 'Syllogisms'] },
-                { name: 'Verbal Ability', items: ['Reading Comprehension', 'Sentence Correction', 'Vocabulary'] }
+                { name: 'Quantitative Aptitude', items: ['Number Systems', 'Percentages & Ratios', 'Time, Speed & Distance', 'Profit & Loss', 'Averages & Mixtures', 'Permutations & Combinations', 'Probability'] },
+                { name: 'Logical Reasoning', items: ['Seating Arrangement', 'Blood Relations', 'Syllogisms', 'Coding-Decoding', 'Direction Sense', 'Data Interpretation'] },
+                { name: 'Verbal Ability', items: ['Reading Comprehension', 'Sentence Correction', 'Vocabulary', 'Para Jumbles', 'Critical Reasoning'] }
             ]
         },
         {
             title: 'Data Structures & Algorithms',
             icon: '⚡',
             topics: [
-                { name: 'Linear Data Structures', items: ['Arrays & Strings', 'Linked Lists', 'Stacks & Queues'] },
-                { name: 'Non-Linear Data Structures', items: ['Trees (BST, Heap)', 'Graphs (BFS, DFS)', 'Hash Tables'] },
-                { name: 'Algorithm Paradigms', items: ['Dynamic Programming', 'Greedy Algorithms', 'Backtracking'] }
+                { name: 'Linear Data Structures', items: ['Arrays & Strings', 'Linked Lists', 'Stacks & Queues', 'Hashing', 'Two Pointers', 'Sliding Window', 'Prefix Sums'] },
+                { name: 'Non-Linear Data Structures', items: ['Binary Trees', 'Binary Search Trees', 'Heaps & Priority Queues', 'Graphs (BFS, DFS)', 'Tries', 'Segment Trees', 'Disjoint Set Union'] },
+                { name: 'Algorithm Paradigms', items: ['Dynamic Programming', 'Greedy Algorithms', 'Backtracking', 'Divide & Conquer', 'Binary Search Variants', 'Bit Manipulation', 'Recursion Patterns'] },
+                { name: 'Advanced Algorithms', items: ['Shortest Path (Dijkstra, Floyd)', 'Topological Sort', 'Minimum Spanning Tree', 'String Matching (KMP, Rabin-Karp)', 'Network Flow Basics'] }
             ]
         },
         {
             title: 'CS Fundamentals',
             icon: '💻',
             topics: [
-                { name: 'Operating Systems', items: ['Process Management', 'Memory Management', 'Concurrency'] },
-                { name: 'DBMS', items: ['SQL vs NoSQL', 'Normalization', 'ACID Properties'] },
-                { name: 'Computer Networks', items: ['OSI Model', 'TCP/IP', 'HTTP/HTTPS'] },
-                { name: 'OOPS', items: ['Encapsulation', 'Polymorphism', 'Inheritance'] }
+                { name: 'Operating Systems', items: ['Process Management', 'Memory Management', 'Concurrency & Synchronization', 'Deadlocks', 'CPU Scheduling', 'Virtual Memory', 'File Systems'] },
+                { name: 'DBMS', items: ['SQL vs NoSQL', 'Normalization (1NF-BCNF)', 'ACID Properties', 'Indexing & B-Trees', 'Transactions & Concurrency Control', 'Query Optimization'] },
+                { name: 'Computer Networks', items: ['OSI Model', 'TCP/IP', 'HTTP/HTTPS', 'DNS & DHCP', 'Subnetting', 'Socket Programming', 'Network Security Basics'] },
+                { name: 'OOPS', items: ['Encapsulation', 'Polymorphism', 'Inheritance', 'Abstraction', 'SOLID Principles', 'Design Patterns (Singleton, Factory, Observer)'] }
             ]
         }
     ]

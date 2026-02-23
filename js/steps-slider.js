@@ -136,31 +136,28 @@ class StepsSlider {
     }
 
     goTo(index) {
-        // Clamp to valid range — no circular wrap for linear carousel
-        if (index < 0) index = 0;
-        if (index >= this.totalSlides) index = this.totalSlides - 1;
+        // Circular wrap
+        const n = this.totalSlides;
+        index = ((index % n) + n) % n;
         if (index === this.currentIndex) return;
         this.currentIndex = index;
         this.updateCards();
     }
 
-    next() {
-        const next = this.currentIndex + 1;
-        this.goTo(next >= this.totalSlides ? 0 : next);
-    }
-
-    prev() {
-        const prev = this.currentIndex - 1;
-        this.goTo(prev < 0 ? this.totalSlides - 1 : prev);
-    }
+    next() { this.goTo(this.currentIndex + 1); }
+    prev() { this.goTo(this.currentIndex - 1); }
 
     updateCards() {
         const mid = this.currentIndex;
+        const n = this.totalSlides;
 
         this.cards.forEach((card, i) => {
-            // Simple linear diff — no circular wrapping
-            // Cards to the left are negative, right are positive
-            const diff = i - mid;
+            // Compute shortest circular distance
+            let diff = i - mid;
+            // Wrap into range [-(n/2), n/2]
+            if (diff > n / 2) diff -= n;
+            if (diff < -n / 2) diff += n;
+
             const absDiff = Math.abs(diff);
 
             card.classList.toggle('is-active', diff === 0);
@@ -168,12 +165,12 @@ class StepsSlider {
             card.classList.toggle('is-next', diff === 1);
             card.classList.toggle('is-far', absDiff >= 2);
 
-            // Clamp offset for CSS transform — cards beyond ±2 stack at ±2 position (hidden)
+            // Clamp visual offset to ±2 so far cards stack neatly at edges
             const clampedOffset = Math.max(-2, Math.min(2, diff));
             card.style.setProperty('--offset', clampedOffset);
             card.style.setProperty('--abs-offset', absDiff);
 
-            // z-index: active on top, neighbors below, far cards buried
+            // z-index set directly — CSS calc on z-index is unreliable
             if (diff === 0) {
                 card.style.zIndex = 20;
             } else if (absDiff === 1) {
@@ -182,12 +179,11 @@ class StepsSlider {
                 card.style.zIndex = 1;
             }
 
-            // Only show center + 1 neighbor each side; hide the rest
+            // Visibility & pointer events
             if (absDiff <= 1) {
                 card.style.visibility = 'visible';
                 card.style.pointerEvents = 'auto';
             } else if (absDiff === 2) {
-                // Show at edge but no interaction
                 card.style.visibility = 'visible';
                 card.style.pointerEvents = 'none';
             } else {
@@ -196,7 +192,6 @@ class StepsSlider {
             }
         });
 
-        // Dots
         this.dots.forEach((dot, i) => {
             dot.classList.toggle('is-active', i === mid);
         });

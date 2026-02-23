@@ -15,7 +15,6 @@ class StepsSlider {
         this.container = null;
         this.cards = [];
         this.dots = [];
-        this.isAnimating = false;
 
         // Touch state
         this.touchStartX = 0;
@@ -137,13 +136,11 @@ class StepsSlider {
     }
 
     goTo(index) {
-        if (this.isAnimating || index === this.currentIndex) return;
+        if (index === this.currentIndex) return;
         if (index < 0) index = this.totalSlides - 1;
         if (index >= this.totalSlides) index = 0;
-        this.isAnimating = true;
         this.currentIndex = index;
         this.updateCards();
-        setTimeout(() => { this.isAnimating = false; }, 650);
     }
 
     next() { this.goTo(this.currentIndex + 1); }
@@ -153,7 +150,6 @@ class StepsSlider {
         const mid = this.currentIndex;
 
         this.cards.forEach((card, i) => {
-            // Distance from center (-2, -1, 0, 1, 2, etc.)
             let diff = i - mid;
 
             // Wrap for circular feel
@@ -167,14 +163,23 @@ class StepsSlider {
             card.classList.toggle('is-next', diff === 1);
             card.classList.toggle('is-far', absDiff >= 2);
 
-            // Positioning via CSS custom properties
+            // Set CSS custom properties for transform
             card.style.setProperty('--offset', diff);
             card.style.setProperty('--abs-offset', absDiff);
 
-            // Visibility: only show center + 2 neighbors
+            // Set z-index directly in JS — CSS calc() on z-index is unreliable
+            if (diff === 0) {
+                card.style.zIndex = 20;
+            } else if (absDiff === 1) {
+                card.style.zIndex = 10;
+            } else {
+                card.style.zIndex = 5;
+            }
+
+            // Pointer events: only active + immediate neighbors are clickable
             if (absDiff <= 2) {
                 card.style.visibility = 'visible';
-                card.style.pointerEvents = diff === 0 ? 'auto' : 'auto';
+                card.style.pointerEvents = 'auto';
             } else {
                 card.style.visibility = 'hidden';
                 card.style.pointerEvents = 'none';

@@ -353,16 +353,6 @@ window.initRoadmap = async function (role, isSample, skillGaps = [], aiData = nu
                 <div class="topic-toggle-icon">▼</div>
             </div>
             <div class="topic-body">
-                <div class="guidance-box">
-                    <div class="guidance-icon">📌</div>
-                    <div class="guidance-content">
-                        <div class="guidance-title">Learning Path</div>
-                        <div class="guidance-steps">
-                            <div class="guidance-step">📘 First: Learn Concepts</div>
-                            <div class="guidance-step">🧠 Then: Practice Problems</div>
-                        </div>
-                    </div>
-                </div>
                 ${topicsHtml}
             </div>
         </div>`;

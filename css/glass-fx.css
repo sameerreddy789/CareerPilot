@@ -20,7 +20,7 @@ body.glass-active #glass-overlay {
     /* The glass effect */
     backdrop-filter: blur(12px) saturate(160%);
     -webkit-backdrop-filter: blur(12px) saturate(160%);
-    background: rgba(11, 14, 23, 0.85);
+    background: rgba(11, 14, 23, 0.75);
     /* Dark tint */
 }
 

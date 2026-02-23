@@ -800,4 +800,14 @@
     .overview-grid {
         grid-template-columns: 1fr;
     }
+
+    .streak-header {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .streak-stats {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
 }

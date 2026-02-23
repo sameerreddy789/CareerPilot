@@ -387,6 +387,13 @@ window.toggleTask = function (taskId, moduleId, checkbox) {
         const log = JSON.parse(localStorage.getItem('nextStep_activity_log') || '{}');
         log[today] = (log[today] || 0) + 1;
         localStorage.setItem('nextStep_activity_log', JSON.stringify(log));
+
+        // Record activity for heatmap/streak tracking
+        if (window.appState && window.appState.logActivity) {
+            window.appState.logActivity();
+        } else {
+            import('./app-state.js').then(m => m.appState.logActivity()).catch(() => {});
+        }
     }
 
     saveRoadmapToDatabase();
@@ -435,6 +442,24 @@ window.toggleModule = function (moduleId, taskIds, checkbox) {
                 SkillStore.syncTaskByTitle(el.querySelector('.subtopic-name').textContent, true);
             }
         });
+
+        // Record activity for each newly completed task
+        const newCount = taskIds.length;
+        if (newCount > 0) {
+            const today = new Date().toISOString().split('T')[0];
+            const log = JSON.parse(localStorage.getItem('nextStep_activity_log') || '{}');
+            log[today] = (log[today] || 0) + newCount;
+            localStorage.setItem('nextStep_activity_log', JSON.stringify(log));
+
+            const logOnce = (state) => {
+                for (let i = 0; i < newCount; i++) state.logActivity();
+            };
+            if (window.appState && window.appState.logActivity) {
+                logOnce(window.appState);
+            } else {
+                import('./app-state.js').then(m => logOnce(m.appState)).catch(() => {});
+            }
+        }
     }
 
     saveRoadmapToDatabase();

@@ -1,305 +1,373 @@
-/* Steps Slider - Modern SaaS Carousel */
+/* ===== 3D Stacked Card Carousel ===== */
 
 .steps-slider {
     position: relative;
     width: 100%;
-    max-width: 900px;
+    max-width: 1100px;
     margin: 0 auto;
-    padding: 40px 0;
+    padding: 40px 0 20px;
+    user-select: none;
 }
 
-.steps-slider-viewport {
+/* 3D Stage */
+.steps3d-stage {
     position: relative;
     width: 100%;
-    overflow: hidden;
-    border-radius: 1.5rem;
-}
-
-.steps-slider-track {
+    height: 460px;
+    perspective: 1200px;
+    perspective-origin: 50% 50%;
     display: flex;
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: transform;
+    align-items: center;
+    justify-content: center;
 }
 
-.step-slide {
-    flex: 0 0 100%;
-    width: 100%;
-    min-height: 380px;
-    position: relative;
-    opacity: 0;
-    transform: scale(0.95);
-    transition: opacity 0.5s ease, transform 0.5s ease;
+/* Individual Card */
+.steps3d-card {
+    position: absolute;
+    width: 420px;
+    height: 440px;
+    cursor: pointer;
+    outline: none;
+    transform-style: preserve-3d;
+    transition:
+        transform 600ms cubic-bezier(0.23, 1, 0.32, 1),
+        opacity 500ms cubic-bezier(0.23, 1, 0.32, 1),
+        filter 500ms ease;
+    will-change: transform, opacity, filter;
 }
 
-.step-slide.is-active {
-    opacity: 1;
-    transform: scale(1);
+/* Card positioning via custom properties */
+.steps3d-card {
+    --tx: calc(var(--offset) * 320px);
+    --tz: calc(var(--abs-offset) * -120px);
+    --sc: calc(1 - var(--abs-offset) * 0.12);
+    --ry: calc(var(--offset) * -8deg);
+    --op: calc(1 - var(--abs-offset) * 0.35);
+
+    transform:
+        translateX(var(--tx))
+        translateZ(var(--tz))
+        scale(var(--sc))
+        rotateY(var(--ry));
+    opacity: var(--op);
+    z-index: calc(10 - var(--abs-offset));
+    filter: blur(calc(var(--abs-offset) * 1.5px));
 }
 
-.step-slide-inner {
+/* Active center card overrides */
+.steps3d-card.is-active {
+    --tx: 0px;
+    --tz: 40px;
+    --sc: 1;
+    --ry: 0deg;
+    --op: 1;
+    z-index: 20;
+    filter: blur(0);
+    cursor: default;
+}
+
+/* Far cards */
+.steps3d-card.is-far {
+    pointer-events: none;
+}
+
+/* Card Inner */
+.steps3d-card-inner {
     position: relative;
     width: 100%;
     height: 100%;
-    min-height: 380px;
-    border-radius: 1.5rem;
+    border-radius: 20px;
     overflow: hidden;
-    background: rgba(26, 26, 46, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(20, 22, 35, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow:
-        0 25px 50px -12px rgba(0, 0, 0, 0.5),
-        0 0 0 1px rgba(255, 255, 255, 0.05) inset;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+        0 20px 60px -15px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+    transition: box-shadow 600ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.step-slide-image {
+/* Active card glow */
+.steps3d-card.is-active .steps3d-card-inner {
+    border-color: rgba(99, 102, 241, 0.25);
+    box-shadow:
+        0 25px 70px -15px rgba(0, 0, 0, 0.6),
+        0 0 60px -10px rgba(99, 102, 241, 0.2),
+        0 0 0 1px rgba(99, 102, 241, 0.15) inset;
+}
+
+/* Image */
+.steps3d-img {
     position: absolute;
     inset: 0;
     z-index: 1;
 }
 
-.step-slide-image img {
+.steps3d-img img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     pointer-events: none;
-    user-select: none;
 }
 
-.step-slide-overlay {
+/* Gradient overlay */
+.steps3d-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0) 100%);
     z-index: 2;
+    background: linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.88) 0%,
+        rgba(0, 0, 0, 0.45) 45%,
+        rgba(0, 0, 0, 0.1) 100%
+    );
 }
 
-.step-slide-content {
+/* Content */
+.steps3d-content {
     position: relative;
     z-index: 3;
     height: 100%;
-    min-height: 380px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    padding: 2rem;
+    padding: 24px 28px 28px;
 }
 
-.step-number {
+/* Step number badge - top center */
+.steps3d-num {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 48px;
-    height: 48px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    color: white;
-    font-size: 1.25rem;
+    color: #fff;
+    font-size: 1.1rem;
     font-weight: 700;
-    margin-bottom: 1rem;
-    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+    font-family: 'Inter', sans-serif;
+    align-self: center;
+    margin-bottom: auto;
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+    flex-shrink: 0;
 }
 
-.step-slide-title {
-    font-size: 1.75rem;
+/* Title & description at bottom */
+.steps3d-title {
+    font-size: 1.5rem;
     font-weight: 700;
-    color: white;
-    margin-bottom: 0.75rem;
-    line-height: 1.3;
+    color: #fff;
+    margin-bottom: 8px;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
 }
 
-.step-slide-description {
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.85);
-    line-height: 1.6;
-    max-width: 500px;
+.steps3d-desc {
+    font-size: 0.92rem;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.55;
+    max-width: 360px;
 }
 
-/* Navigation Arrows */
-.steps-slider-nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 10;
+/* ===== Navigation ===== */
+.steps3d-nav {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    gap: 20px;
+    margin-top: 28px;
 }
 
-.steps-slider-nav:hover {
-    background: rgba(99, 102, 241, 0.6);
-    border-color: rgba(99, 102, 241, 0.8);
-    transform: translateY(-50%) scale(1.1);
-}
-
-.steps-slider-nav:active {
-    transform: translateY(-50%) scale(0.95);
-}
-
-.steps-slider-nav.prev {
-    left: -24px;
-}
-
-.steps-slider-nav.next {
-    right: -24px;
-}
-
-.steps-slider-nav svg {
-    width: 24px;
-    height: 24px;
-    stroke: currentColor;
-    stroke-width: 2;
-    fill: none;
-}
-
-/* Dots Navigation */
-.steps-slider-dots {
+.steps3d-arrow {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    margin-top: 2rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    flex-shrink: 0;
 }
 
-.steps-dot {
-    width: 12px;
-    height: 12px;
+.steps3d-arrow:hover {
+    background: rgba(99, 102, 241, 0.5);
+    border-color: rgba(99, 102, 241, 0.7);
+    color: #fff;
+    transform: scale(1.08);
+}
+
+.steps3d-arrow:active {
+    transform: scale(0.95);
+}
+
+/* Dots */
+.steps3d-dots {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.steps3d-dot {
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
-    border: 2px solid transparent;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.18);
+    border: none;
     padding: 0;
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.steps-dot:hover:not(.is-active) {
-    background: rgba(255, 255, 255, 0.4);
+.steps3d-dot:hover:not(.is-active) {
+    background: rgba(255, 255, 255, 0.35);
     transform: scale(1.2);
 }
 
-.steps-dot.is-active {
-    background: #6366f1;
-    border-color: rgba(99, 102, 241, 0.5);
-    transform: scale(1.3);
-    box-shadow: 0 0 16px rgba(99, 102, 241, 0.6);
-}
-
-/* Progress Bar (optional visual) */
-.steps-slider-progress {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 3px;
+.steps3d-dot.is-active {
+    width: 28px;
+    border-radius: 5px;
     background: linear-gradient(90deg, #6366f1, #8b5cf6);
-    border-radius: 2px;
-    transition: width 0.1s linear;
-    z-index: 5;
+    box-shadow: 0 0 14px rgba(99, 102, 241, 0.5);
 }
 
-/* Responsive */
+
+/* ===== Light Theme ===== */
+[data-theme="light"] .steps3d-card-inner {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow:
+        0 20px 60px -15px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(0, 0, 0, 0.04) inset;
+}
+
+[data-theme="light"] .steps3d-card.is-active .steps3d-card-inner {
+    border-color: rgba(99, 102, 241, 0.2);
+    box-shadow:
+        0 25px 70px -15px rgba(0, 0, 0, 0.2),
+        0 0 50px -10px rgba(99, 102, 241, 0.12),
+        0 0 0 1px rgba(99, 102, 241, 0.12) inset;
+}
+
+[data-theme="light"] .steps3d-arrow {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: rgba(26, 26, 46, 0.6);
+}
+
+[data-theme="light"] .steps3d-arrow:hover {
+    background: rgba(99, 102, 241, 0.5);
+    border-color: rgba(99, 102, 241, 0.7);
+    color: #fff;
+}
+
+[data-theme="light"] .steps3d-dot {
+    background: rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="light"] .steps3d-dot:hover:not(.is-active) {
+    background: rgba(0, 0, 0, 0.25);
+}
+
+/* ===== Responsive: Tablet ===== */
 @media (max-width: 1024px) {
-    .steps-slider {
-        max-width: 700px;
+    .steps3d-stage {
+        height: 420px;
+        perspective: 1000px;
     }
-    
-    .steps-slider-nav.prev {
-        left: 8px;
-    }
-    
-    .steps-slider-nav.next {
-        right: 8px;
+
+    .steps3d-card {
+        width: 360px;
+        height: 400px;
+        --tx: calc(var(--offset) * 260px);
+        --tz: calc(var(--abs-offset) * -100px);
     }
 }
 
+/* ===== Responsive: Mobile — horizontal swipe slider ===== */
 @media (max-width: 768px) {
-    .steps-slider {
-        padding: 20px 0;
+    .steps3d-stage {
+        height: auto;
+        perspective: none;
+        display: flex;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: 16px;
+        padding: 8px 24px 16px;
+        scrollbar-width: none;
     }
-    
-    .step-slide {
-        min-height: 320px;
+
+    .steps3d-stage::-webkit-scrollbar {
+        display: none;
     }
-    
-    .step-slide-inner {
-        min-height: 320px;
+
+    .steps3d-card {
+        position: relative;
+        flex: 0 0 85vw;
+        max-width: 340px;
+        width: 85vw;
+        height: 380px;
+        scroll-snap-align: center;
+        transform: none !important;
+        opacity: 1 !important;
+        filter: none !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        cursor: default;
     }
-    
-    .step-slide-content {
-        min-height: 320px;
-        padding: 1.5rem;
+
+    .steps3d-card-inner {
+        border-radius: 16px;
     }
-    
-    .step-number {
-        width: 40px;
-        height: 40px;
-        font-size: 1rem;
+
+    .steps3d-content {
+        padding: 20px 22px 24px;
     }
-    
-    .step-slide-title {
-        font-size: 1.35rem;
+
+    .steps3d-num {
+        width: 36px;
+        height: 36px;
+        font-size: 0.95rem;
     }
-    
-    .step-slide-description {
-        font-size: 0.9rem;
+
+    .steps3d-title {
+        font-size: 1.25rem;
     }
-    
-    .steps-slider-nav {
-        width: 40px;
-        height: 40px;
+
+    .steps3d-desc {
+        font-size: 0.85rem;
     }
-    
-    .steps-slider-nav.prev {
-        left: 4px;
+
+    /* Hide arrows on mobile, keep dots */
+    .steps3d-arrow {
+        display: none;
     }
-    
-    .steps-slider-nav.next {
-        right: 4px;
-    }
-    
-    .steps-slider-nav svg {
-        width: 20px;
-        height: 20px;
+
+    .steps3d-nav {
+        margin-top: 16px;
     }
 }
 
 @media (max-width: 480px) {
-    .step-slide {
-        min-height: 280px;
+    .steps3d-card {
+        flex: 0 0 88vw;
+        max-width: 300px;
+        height: 340px;
     }
-    
-    .step-slide-inner {
-        min-height: 280px;
-        border-radius: 1rem;
+
+    .steps3d-content {
+        padding: 16px 18px 20px;
     }
-    
-    .step-slide-content {
-        min-height: 280px;
-        padding: 1.25rem;
+
+    .steps3d-title {
+        font-size: 1.1rem;
     }
-    
-    .step-slide-title {
-        font-size: 1.15rem;
-    }
-    
-    .step-slide-description {
-        font-size: 0.85rem;
-    }
-    
-    .steps-slider-dots {
-        gap: 10px;
-    }
-    
-    .steps-dot {
-        width: 10px;
-        height: 10px;
+
+    .steps3d-desc {
+        font-size: 0.82rem;
     }
 }

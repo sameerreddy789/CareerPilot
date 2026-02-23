@@ -1,228 +1,194 @@
 /**
- * StepsSlider - Modern SaaS Carousel
- * Clean state management with smooth animations
+ * StepsSlider - 3D Stacked Card Carousel
+ * Apple-style perspective depth with smooth transitions
  */
 
 class StepsSlider {
     constructor(options = {}) {
         this.options = {
             containerSelector: options.containerSelector || '#steps-slider-container',
-            autoPlay: options.autoPlay !== undefined ? options.autoPlay : true,
-            autoPlayInterval: options.autoPlayInterval || 4500,
             items: options.items || []
         };
 
-        // State
         this.currentIndex = 0;
         this.totalSlides = this.options.items.length;
-        this.autoPlayTimer = null;
-        this.isHovering = false;
-
-        // DOM elements
         this.container = null;
-        this.track = null;
-        this.slides = [];
+        this.cards = [];
         this.dots = [];
-        this.prevBtn = null;
-        this.nextBtn = null;
+        this.isAnimating = false;
 
-        if (this.totalSlides > 0) {
-            this.init();
-        }
+        // Touch state
+        this.touchStartX = 0;
+        this.touchStartY = 0;
+
+        if (this.totalSlides > 0) this.init();
     }
 
     init() {
         this.render();
         this.bindEvents();
-        this.goToSlide(0, false);
-        
-        if (this.options.autoPlay) {
-            this.startAutoPlay();
-        }
+        this.updateCards();
     }
 
     render() {
-        const container = document.querySelector(this.options.containerSelector);
-        if (!container) return;
+        const el = document.querySelector(this.options.containerSelector);
+        if (!el) return;
+        this.container = el;
+        el.className = 'steps-slider';
 
-        this.container = container;
-        container.className = 'steps-slider';
-
-        // Build HTML
-        container.innerHTML = `
-            <div class="steps-slider-viewport">
-                <div class="steps-slider-track">
-                    ${this.options.items.map((item, i) => `
-                        <div class="step-slide" data-index="${i}">
-                            <div class="step-slide-inner">
-                                <div class="step-slide-image">
-                                    ${item.imageSrc ? `<img src="${item.imageSrc}" alt="${item.title}" loading="lazy">` : ''}
-                                </div>
-                                <div class="step-slide-overlay"></div>
-                                <div class="step-slide-content">
-                                    <div class="step-number">${i + 1}</div>
-                                    <h3 class="step-slide-title">${item.title}</h3>
-                                    <p class="step-slide-description">${item.description}</p>
-                                </div>
+        el.innerHTML = `
+            <div class="steps3d-stage">
+                ${this.options.items.map((item, i) => `
+                    <div class="steps3d-card" data-index="${i}" tabindex="0" role="button" aria-label="Step ${i + 1}: ${item.title}">
+                        <div class="steps3d-card-inner">
+                            <div class="steps3d-img">${item.imageSrc ? `<img src="${item.imageSrc}" alt="${item.title}" loading="lazy">` : ''}</div>
+                            <div class="steps3d-overlay"></div>
+                            <div class="steps3d-content">
+                                <span class="steps3d-num">${i + 1}</span>
+                                <h3 class="steps3d-title">${item.title}</h3>
+                                <p class="steps3d-desc">${item.description}</p>
                             </div>
                         </div>
-                    `).join('')}
-                </div>
-                <button class="steps-slider-nav prev" aria-label="Previous slide">
-                    <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-                </button>
-                <button class="steps-slider-nav next" aria-label="Next slide">
-                    <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
-                </button>
-            </div>
-            <div class="steps-slider-dots">
-                ${this.options.items.map((_, i) => `
-                    <button class="steps-dot" data-index="${i}" aria-label="Go to slide ${i + 1}"></button>
+                    </div>
                 `).join('')}
+            </div>
+            <div class="steps3d-nav">
+                <button class="steps3d-arrow steps3d-prev" aria-label="Previous step">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                </button>
+                <div class="steps3d-dots">
+                    ${this.options.items.map((_, i) => `<button class="steps3d-dot" data-index="${i}" aria-label="Go to step ${i + 1}"></button>`).join('')}
+                </div>
+                <button class="steps3d-arrow steps3d-next" aria-label="Next step">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
             </div>
         `;
 
-        // Cache DOM references
-        this.track = container.querySelector('.steps-slider-track');
-        this.slides = Array.from(container.querySelectorAll('.step-slide'));
-        this.dots = Array.from(container.querySelectorAll('.steps-dot'));
-        this.prevBtn = container.querySelector('.steps-slider-nav.prev');
-        this.nextBtn = container.querySelector('.steps-slider-nav.next');
+        this.cards = Array.from(el.querySelectorAll('.steps3d-card'));
+        this.dots = Array.from(el.querySelectorAll('.steps3d-dot'));
     }
 
     bindEvents() {
-        // Navigation buttons
-        this.prevBtn?.addEventListener('click', () => this.prev());
-        this.nextBtn?.addEventListener('click', () => this.next());
-
-        // Dots
-        this.dots.forEach(dot => {
-            dot.addEventListener('click', () => {
-                const index = parseInt(dot.dataset.index, 10);
-                this.goToSlide(index);
+        // Card clicks
+        this.cards.forEach(card => {
+            card.addEventListener('click', () => {
+                const idx = parseInt(card.dataset.index, 10);
+                if (idx !== this.currentIndex) this.goTo(idx);
+            });
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    const idx = parseInt(card.dataset.index, 10);
+                    if (idx !== this.currentIndex) this.goTo(idx);
+                }
             });
         });
 
-        // Pause on hover
-        this.container?.addEventListener('mouseenter', () => {
-            this.isHovering = true;
-            this.stopAutoPlay();
+        // Dots
+        this.dots.forEach(dot => {
+            dot.addEventListener('click', () => this.goTo(parseInt(dot.dataset.index, 10)));
         });
 
-        this.container?.addEventListener('mouseleave', () => {
-            this.isHovering = false;
-            if (this.options.autoPlay) {
-                this.startAutoPlay();
-            }
+        // Arrows
+        this.container.querySelector('.steps3d-prev')?.addEventListener('click', () => this.prev());
+        this.container.querySelector('.steps3d-next')?.addEventListener('click', () => this.next());
+
+        // Keyboard on container
+        this.container.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') this.prev();
+            else if (e.key === 'ArrowRight') this.next();
         });
 
-        // Keyboard navigation
-        this.container?.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') {
-                this.prev();
-            } else if (e.key === 'ArrowRight') {
-                this.next();
-            }
-        });
-
-        // Touch/swipe support
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        this.container?.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-            this.stopAutoPlay();
+        // Touch swipe (desktop 3D mode)
+        this.container.addEventListener('touchstart', (e) => {
+            this.touchStartX = e.changedTouches[0].screenX;
+            this.touchStartY = e.changedTouches[0].screenY;
         }, { passive: true });
 
-        this.container?.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].screenX;
-            this.handleSwipe(touchStartX, touchEndX);
-            if (this.options.autoPlay && !this.isHovering) {
-                this.startAutoPlay();
+        this.container.addEventListener('touchend', (e) => {
+            const dx = this.touchStartX - e.changedTouches[0].screenX;
+            const dy = this.touchStartY - e.changedTouches[0].screenY;
+            if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+                dx > 0 ? this.next() : this.prev();
             }
         }, { passive: true });
+
+        // Mobile scroll-snap: sync dots via IntersectionObserver
+        this.setupMobileScrollSync();
     }
 
-    handleSwipe(startX, endX) {
-        const threshold = 50;
-        const diff = startX - endX;
+    setupMobileScrollSync() {
+        if (!('IntersectionObserver' in window)) return;
+        const stage = this.container.querySelector('.steps3d-stage');
+        if (!stage) return;
 
-        if (Math.abs(diff) > threshold) {
-            if (diff > 0) {
-                this.next();
-            } else {
-                this.prev();
-            }
-        }
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+                    const idx = parseInt(entry.target.dataset.index, 10);
+                    this.currentIndex = idx;
+                    this.dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+                }
+            });
+        }, { root: stage, threshold: 0.6 });
+
+        this.cards.forEach(card => observer.observe(card));
     }
 
-    goToSlide(index, animate = true) {
-        // Wrap index
-        if (index < 0) {
-            index = this.totalSlides - 1;
-        } else if (index >= this.totalSlides) {
-            index = 0;
-        }
-
+    goTo(index) {
+        if (this.isAnimating || index === this.currentIndex) return;
+        if (index < 0) index = this.totalSlides - 1;
+        if (index >= this.totalSlides) index = 0;
+        this.isAnimating = true;
         this.currentIndex = index;
+        this.updateCards();
+        setTimeout(() => { this.isAnimating = false; }, 650);
+    }
 
-        // Update track position
-        const translateX = -index * 100;
-        this.track.style.transition = animate ? 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)' : 'none';
-        this.track.style.transform = `translateX(${translateX}%)`;
+    next() { this.goTo(this.currentIndex + 1); }
+    prev() { this.goTo(this.currentIndex - 1); }
 
-        // Update slides (active state for fade/scale)
-        this.slides.forEach((slide, i) => {
-            slide.classList.toggle('is-active', i === index);
+    updateCards() {
+        const mid = this.currentIndex;
+
+        this.cards.forEach((card, i) => {
+            // Distance from center (-2, -1, 0, 1, 2, etc.)
+            let diff = i - mid;
+
+            // Wrap for circular feel
+            if (diff > Math.floor(this.totalSlides / 2)) diff -= this.totalSlides;
+            if (diff < -Math.floor(this.totalSlides / 2)) diff += this.totalSlides;
+
+            const absDiff = Math.abs(diff);
+
+            card.classList.toggle('is-active', diff === 0);
+            card.classList.toggle('is-prev', diff === -1);
+            card.classList.toggle('is-next', diff === 1);
+            card.classList.toggle('is-far', absDiff >= 2);
+
+            // Positioning via CSS custom properties
+            card.style.setProperty('--offset', diff);
+            card.style.setProperty('--abs-offset', absDiff);
+
+            // Visibility: only show center + 2 neighbors
+            if (absDiff <= 2) {
+                card.style.visibility = 'visible';
+                card.style.pointerEvents = diff === 0 ? 'auto' : 'auto';
+            } else {
+                card.style.visibility = 'hidden';
+                card.style.pointerEvents = 'none';
+            }
         });
 
-        // Update dots
+        // Dots
         this.dots.forEach((dot, i) => {
-            dot.classList.toggle('is-active', i === index);
+            dot.classList.toggle('is-active', i === mid);
         });
-
-        // Reset autoplay timer on manual change
-        if (animate && this.options.autoPlay && !this.isHovering) {
-            this.resetAutoPlay();
-        }
-    }
-
-    next() {
-        this.goToSlide(this.currentIndex + 1);
-    }
-
-    prev() {
-        this.goToSlide(this.currentIndex - 1);
-    }
-
-    startAutoPlay() {
-        this.stopAutoPlay();
-        this.autoPlayTimer = setInterval(() => {
-            this.next();
-        }, this.options.autoPlayInterval);
-    }
-
-    stopAutoPlay() {
-        if (this.autoPlayTimer) {
-            clearInterval(this.autoPlayTimer);
-            this.autoPlayTimer = null;
-        }
-    }
-
-    resetAutoPlay() {
-        this.stopAutoPlay();
-        this.startAutoPlay();
-    }
-
-    destroy() {
-        this.stopAutoPlay();
-        if (this.container) {
-            this.container.innerHTML = '';
-        }
     }
 }
 
-// Initialize on DOM ready
+// Initialize
 const initStepsSlider = () => {
     const stepsData = [
         {
@@ -252,18 +218,14 @@ const initStepsSlider = () => {
         }
     ];
 
-    const container = document.getElementById('steps-slider-container');
-    if (container) {
+    if (document.getElementById('steps-slider-container')) {
         new StepsSlider({
             containerSelector: '#steps-slider-container',
-            items: stepsData,
-            autoPlay: true,
-            autoPlayInterval: 4500
+            items: stepsData
         });
     }
 };
 
-// Run initialization
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initStepsSlider);
 } else {

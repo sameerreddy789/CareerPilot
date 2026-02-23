@@ -5,7 +5,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: -1;
+    z-index: 0;
     /* Starts transparent to show body background */
     background: rgba(15, 20, 30, 0.0);
     backdrop-filter: blur(0px);
@@ -46,12 +46,14 @@ body.glass-active .cursor-glow {
     opacity: 1;
 }
 
-/* Ensure content floats above the glass background */
+/* Ensure content floats above the glass background and body::after overlay */
 section,
 .section,
 .hero,
 .footer,
-.container {
+.container,
+.features-highlights,
+.faq-section {
     position: relative;
     z-index: 1;
 }

@@ -340,8 +340,18 @@
 
 /* Body Background - Global Image */
 body {
-    background: url('assets/BG/download.jpg') no-repeat center center fixed !important;
+    background: url('../assets/BG/download.jpg') no-repeat center center fixed !important;
     background-size: cover !important;
+}
+
+/* Dark overlay so the BG image doesn't wash out the dark theme */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 12, 18, 0.82);
+    z-index: 0;
+    pointer-events: none;
 }
 
 /* Hero Section - Layout Only */
@@ -354,6 +364,8 @@ body {
     justify-content: center;
     position: relative;
     padding: 0 20px;
+    margin-top: 0;
+    z-index: 1;
 }
 
 /* Glassmorphic Pane for Hero Content - Hugs Content */

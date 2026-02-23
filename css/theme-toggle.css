@@ -135,6 +135,14 @@
 }
 
 /* Hero section */
+[data-theme="light"] .hero-content {
+    background: rgba(255, 255, 255, 0.35);
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow:
+        0 25px 60px rgba(0, 0, 0, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
 [data-theme="light"] .hero-title {
     color: #1A1A2E;
 }

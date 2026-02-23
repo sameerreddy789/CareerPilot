@@ -1,0 +1,1410 @@
+/* Animated Background */
+body {
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.10) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(30, 64, 175, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.06) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+    animation: gradientShift 20s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+
+    0%,
+    100% {
+        background:
+            radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.10) 0%, transparent 40%),
+            radial-gradient(circle at 80% 70%, rgba(30, 64, 175, 0.08) 0%, transparent 40%),
+            radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.06) 0%, transparent 50%);
+    }
+
+    50% {
+        background:
+            radial-gradient(circle at 80% 40%, rgba(59, 130, 246, 0.10) 0%, transparent 40%),
+            radial-gradient(circle at 20% 80%, rgba(30, 64, 175, 0.08) 0%, transparent 40%),
+            radial-gradient(circle at 50% 20%, rgba(139, 92, 246, 0.06) 0%, transparent 50%);
+    }
+}
+
+.app-container {
+    position: relative;
+    z-index: 1;
+}
+
+.user-avatar-lg {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--accent-green), var(--accent-green-dark));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+/* Dashboard Content — two independent flex columns */
+.dashboard-content {
+    display: flex;
+    gap: 14px;
+    min-width: 0;
+}
+
+.dash-col {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.dash-col:first-child {
+    flex: 1.6;
+    min-width: 0;
+}
+
+.dash-col:last-child {
+    flex: 0.8;
+    min-width: 0;
+}
+
+@media (max-width: 1024px) {
+    .dashboard-content {
+        flex-direction: column;
+    }
+}
+
+/* ====== Momentum System ====== */
+.momentum-card {
+    padding: 20px 24px 14px;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.35),
+        0 2px 8px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Noise texture overlay */
+.momentum-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.025;
+    pointer-events: none;
+    z-index: 0;
+    mix-blend-mode: overlay;
+}
+
+.momentum-card>* {
+    position: relative;
+    z-index: 1;
+}
+
+.momentum-card .card-header {
+    align-items: flex-start;
+    margin-bottom: 2px;
+}
+
+.pulse-header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.pulse-insight {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    font-weight: 400;
+    line-height: 1.4;
+    opacity: 0.85;
+}
+
+.pulse-header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.streak-badge {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    padding: 3px 9px;
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.15);
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fbbf24;
+}
+
+.streak-fire {
+    font-size: 13px;
+}
+
+.momentum-status {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.2px;
+}
+
+/* ---- Consistency Crown ---- */
+.momentum-crown-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 0 8%;
+    margin: 6px 0 0;
+}
+
+.momentum-crown-wrap svg {
+    width: 100%;
+    height: 6px;
+    overflow: visible;
+}
+
+/* ---- Timeline Row ---- */
+.pulse-timeline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0 8px;
+    gap: 0;
+    position: relative;
+}
+
+/* ---- Day Node ---- */
+.pulse-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    flex: 1;
+    position: relative;
+    z-index: 2;
+}
+
+/* ---- Animated connector pulse wave ---- */
+.pulse-day:not(:first-child)::before {
+    content: '';
+    position: absolute;
+    top: 18px;
+    right: 50%;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg,
+            rgba(16, 185, 129, 0.0),
+            rgba(16, 185, 129, 0.12),
+            rgba(59, 130, 246, 0.12),
+            rgba(59, 130, 246, 0.0));
+    background-size: 200% 100%;
+    animation: connectorPulse 8s ease-in-out infinite;
+    z-index: 0;
+}
+
+@keyframes connectorPulse {
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+        opacity: 0.4;
+    }
+
+    50% {
+        background-position: 100% 50%;
+        opacity: 1;
+    }
+}
+
+/* ---- Ring — progressive gradient donut ---- */
+.pulse-ring {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition:
+        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.3s ease,
+        filter 0.3s ease;
+    z-index: 2;
+}
+
+/* Ring track + fill via conic-gradient */
+.pulse-ring::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg,
+            var(--ring-start, rgba(255, 255, 255, 0.05)) 0%,
+            var(--ring-end, rgba(255, 255, 255, 0.05)) calc(var(--fill, 0) * 1%),
+            rgba(255, 255, 255, 0.04) calc(var(--fill, 0) * 1%),
+            rgba(255, 255, 255, 0.04) 100%);
+    z-index: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Inner cutout — donut hole */
+.pulse-ring::after {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    border-radius: 50%;
+    background: var(--bg-card, #0a0a0f);
+    transition: box-shadow 0.3s ease;
+    z-index: 1;
+}
+
+.pulse-count {
+    position: relative;
+    z-index: 3;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+    transition: color 0.3s ease;
+}
+
+/* Hover lift */
+.pulse-day:hover .pulse-ring {
+    transform: scale(1.08);
+}
+
+/* ---- Active state ---- */
+.pulse-day.active .pulse-count {
+    color: var(--text-primary);
+}
+
+.pulse-day.active .pulse-ring::after {
+    box-shadow: inset 0 0 6px rgba(16, 185, 129, 0.06);
+}
+
+.pulse-day.active .pulse-day-label {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+/* ---- Today — breathing glow ---- */
+.pulse-day.is-today .pulse-ring {
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+}
+
+.pulse-day.is-today .pulse-ring::after {
+    box-shadow: inset 0 0 8px rgba(59, 130, 246, 0.08);
+}
+
+.pulse-day.is-today.active .pulse-ring {
+    animation: momentumBreath 4s ease-in-out infinite;
+}
+
+@keyframes momentumBreath {
+
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow:
+            0 0 0 2px rgba(59, 130, 246, 0.12),
+            0 0 8px rgba(59, 130, 246, 0.06);
+    }
+
+    50% {
+        transform: scale(1.02);
+        box-shadow:
+            0 0 0 3px rgba(59, 130, 246, 0.08),
+            0 0 14px rgba(59, 130, 246, 0.1);
+    }
+}
+
+/* ---- Selected state ---- */
+.pulse-day.selected .pulse-ring {
+    transform: scale(1.12);
+    box-shadow:
+        0 0 0 2px rgba(255, 255, 255, 0.1),
+        0 0 12px rgba(255, 255, 255, 0.04);
+}
+
+/* ---- Day label ---- */
+.pulse-day-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.35);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    transition: color 0.3s ease;
+}
+
+.pulse-day.is-today .pulse-day-label {
+    color: #60a5fa;
+    font-weight: 700;
+}
+
+/* ====== Detail Slide Panel ====== */
+.pulse-detail {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+        max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.3s ease 0.05s,
+        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.05s;
+    margin: 0;
+    padding: 0;
+}
+
+.pulse-detail.expanded {
+    max-height: 300px;
+    padding-top: 14px;
+    margin-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.detail-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.detail-close {
+    font-size: 14px;
+    color: var(--text-muted);
+    cursor: pointer;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background: transparent;
+    border: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.detail-close:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Stats Grid */
+.detail-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.detail-stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.detail-stat-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.detail-stat-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+.detail-stat-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+/* Task items in detail */
+.detail-items {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 8px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.detail-item-icon {
+    font-size: 11px;
+    width: 18px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.detail-empty {
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 10px 0;
+    text-align: center;
+}
+
+/* ---- Weekly Progress Strip ---- */
+.weekly-progress-strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0 4px;
+    margin-top: 4px;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.weekly-strip-title {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.weekly-strip-stats {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.weekly-strip-stat {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.weekly-strip-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+.weekly-strip-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.weekly-strip-divider {
+    width: 1px;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.chart-container {
+    padding: 20px 0;
+}
+
+.bar-chart {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 180px;
+    padding: 0 10px;
+}
+
+.bar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.bar-item .bar {
+    width: 24px;
+    background: rgba(16, 185, 129, 0.3);
+    border-radius: 6px 6px 0 0;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.bar-item.active .bar {
+    background: linear-gradient(180deg, var(--accent-green), var(--accent-green-dark));
+}
+
+.bar-item:hover .bar {
+    background: linear-gradient(180deg, var(--accent-green), var(--accent-green-dark));
+}
+
+.bar-item span {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* ====== Job Readiness — Apple Liquid Glass ====== */
+
+/* Liquid-glass float on the CARD — "lifted off frame" effect */
+.dash-col:last-child>.card:first-child {
+    position: relative;
+    transition:
+        transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+        box-shadow 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+        border-color 0.4s ease;
+    will-change: transform, box-shadow;
+}
+
+.dash-col:last-child>.card:first-child:hover {
+    /*transform: translateY(-8px) scale(1.012);
+    border-radius: 24px;*/
+    border-color: rgba(180, 200, 255, 0.18);
+    box-shadow:
+        /* Deep lift shadow */
+        0 24px 64px rgba(9, 9, 43, 0.584),
+        0 8px 24px rgba(13, 35, 61, 0.401),
+        /* Glass edge glow */
+        0 0 0 1.5px rgba(180, 200, 255, 0.12),
+        /* Inner glass rim highlights */
+        inset 0 1px 0 rgba(155, 212, 248, 0.434),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.03),
+        /* Ambient glass glow */
+        0 0 80px -16px rgba(140, 170, 255, 0.12),
+        0 0 40px -8px rgba(127, 137, 249, 0.363);
+}
+
+.dash-col:last-child>.card:first-child:hover::after {
+    opacity: 1;
+    inset: -4px;
+    background:
+        linear-gradient(135deg,
+            rgba(120, 160, 255, 0.08) 0%,
+            rgba(180, 140, 255, 0.06) 40%,
+            rgba(100, 200, 220, 0.05) 70%,
+            rgba(140, 180, 255, 0.08) 100%);
+    filter: blur(12px);
+}
+
+.readiness-chart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}
+
+.pie-chart-container {
+    position: relative;
+    width: 240px;
+    height: 240px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ---- Frosted Glass Donut Ring ---- */
+.pie-donut {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background: transparent;
+    border: none;
+    transition: filter 0.5s ease;
+    backdrop-filter: blur(12px);
+}
+
+/* ---- Dark Inset Center Disc ---- */
+.pie-center-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    pointer-events: none;
+    z-index: 10;
+    width: 130px;
+    height: 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background:
+        radial-gradient(ellipse at 45% 35%,
+            rgba(15, 30, 61, 0.85) 0%,
+            rgba(28, 36, 61, 0.95) 70%);
+    border: 1px solid rgba(104, 135, 178, 0.29);
+    box-shadow:
+        /* Inset depth */
+        inset 0 4px 16px rgba(44, 73, 92, 0.478),
+        inset 0 -2px 8px rgba(35, 18, 60, 0.3),
+        inset 0 0 24px rgba(0, 0, 0, 0.4),
+        /* Subtle rim light */
+        0 0 0 1px rgba(76, 5, 81, 0.473),
+        0 2px 8px rgba(53, 4, 79, 0.323);
+}
+
+.pie-value {
+    display: block;
+    font-size: 42px;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+.pie-label {
+    display: block;
+    font-size: 9px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-top: 6px;
+    font-weight: 700;
+    opacity: 0.7;
+}
+
+/* ---- SVG Ring — the glowing glass tube ---- */
+.readiness-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    transform: rotate(-90deg);
+}
+
+/* ---- Legend — Liquid Glass Items ---- */
+.readiness-legend {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 16px;
+    position: relative;
+    overflow: hidden;
+    background:
+        linear-gradient(135deg,
+            rgba(255, 255, 255, 0.05) 0%,
+            rgba(255, 255, 255, 0.02) 50%,
+            rgba(255, 255, 255, 0.04) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 14px;
+    backdrop-filter: blur(12px) saturate(1.15);
+    -webkit-backdrop-filter: blur(12px) saturate(1.15);
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    transition:
+        transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+        box-shadow 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+        border-color 0.3s ease,
+        border-radius 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+        background 0.3s ease;
+    cursor: pointer;
+}
+
+/* Sliding shimmer highlight on hover */
+.legend-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.07),
+            transparent);
+    transition: left 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    pointer-events: none;
+}
+
+.legend-item:hover::before {
+    left: 100%;
+}
+
+.legend-item:hover {
+    transform: translateY(-3px) scale(1.015);
+    border-color: rgba(180, 200, 255, 0.16);
+    border-radius: 18px;
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.2),
+        0 0 0 1px rgba(180, 200, 255, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        0 0 40px -10px rgba(140, 170, 255, 0.10);
+    background:
+        linear-gradient(135deg,
+            rgba(255, 255, 255, 0.08) 0%,
+            rgba(255, 255, 255, 0.03) 50%,
+            rgba(255, 255, 255, 0.06) 100%);
+}
+
+/* ---- Legend Dots — glass orbs ---- */
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    position: relative;
+    flex-shrink: 0;
+}
+
+/* Inner specular highlight on dots */
+.legend-dot::after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 2px;
+    width: 5px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    filter: blur(1px);
+}
+
+.legend-dot.green {
+    background: radial-gradient(circle at 40% 35%,
+            rgba(52, 255, 180, 0.9),
+            var(--accent-green) 60%,
+            rgba(10, 130, 80, 0.9));
+    box-shadow:
+        0 0 12px rgba(16, 185, 129, 0.5),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.legend-dot.blue {
+    background: radial-gradient(circle at 40% 35%,
+            rgba(120, 180, 255, 0.9),
+            #3B82F6 60%,
+            rgba(20, 60, 180, 0.9));
+    box-shadow:
+        0 0 12px rgba(59, 130, 246, 0.5),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.legend-dot.gray {
+    background: radial-gradient(circle at 40% 35%,
+            rgba(255, 255, 255, 0.95),
+            #E5E7EB 60%,
+            rgba(160, 165, 175, 0.9));
+    box-shadow:
+        0 0 10px rgba(229, 231, 235, 0.25),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.12);
+}
+
+.legend-text {
+    flex: 1;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.legend-percent {
+    font-weight: 700;
+    color: var(--text-primary);
+    font-size: 12px;
+    margin-left: 8px;
+    opacity: 0.9;
+}
+
+/* ---- Tooltip — Liquid Glass ---- */
+.chart-tooltip {
+    position: absolute;
+    background:
+        linear-gradient(135deg,
+            rgba(20, 24, 35, 0.88) 0%,
+            rgba(12, 14, 22, 0.92) 100%);
+    backdrop-filter: blur(24px) saturate(1.3);
+    -webkit-backdrop-filter: blur(24px) saturate(1.3);
+    border: 1px solid rgba(180, 200, 255, 0.12);
+    padding: 10px 14px;
+    border-radius: 14px;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+    z-index: 100;
+    text-align: center;
+    min-width: 100px;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(255, 255, 255, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.10);
+}
+
+.chart-tooltip.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.tooltip-status {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+}
+
+.tooltip-percent {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+/* Task Item Transitions & Classes */
+.task-item.completed {
+    opacity: 0.6;
+}
+
+.task-title.completed {
+    text-decoration: line-through !important;
+    color: var(--text-muted);
+}
+
+.task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Task cards — base height */
+.task-card-equal {
+    display: flex;
+    flex-direction: column;
+    max-height: 300px;
+    min-height: 300px;
+    flex: 0 0 auto;
+    overflow: hidden;
+}
+
+/* Assigned Tasks — taller */
+#assigned-tasks-card.task-card-equal {
+    max-height: 631px;
+    min-height: 631px;
+}
+
+.task-card-equal .card-header {
+    flex-shrink: 0;
+}
+
+.task-card-equal .task-filter-tabs {
+    flex-shrink: 0;
+}
+
+/* Task list fills remaining card space, scrolls if needed */
+.task-list-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* Custom scrollbar */
+.task-list-scroll::-webkit-scrollbar {
+    width: 4px;
+}
+
+.task-list-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.task-list-scroll::-webkit-scrollbar-thumb {
+    background: rgba(60, 75, 244, 0.314);
+    border-radius: 4px;
+}
+
+.task-list-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(60, 75, 244, 0.61);
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 12px;
+    background: var(--glass-bg);
+    border-radius: 10px;
+    transition: var(--transition-fast);
+    border: 1px solid transparent;
+}
+
+.task-item:hover {
+    background: var(--glass-bg-hover);
+    border-color: rgba(255, 255, 255, 0.06);
+}
+
+.task-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.task-icon.blue {
+    background: rgba(59, 130, 246, 0.2);
+}
+
+.task-icon.purple {
+    background: rgba(139, 92, 246, 0.2);
+}
+
+.task-icon.green {
+    background: rgba(16, 185, 129, 0.2);
+}
+
+.task-icon.gold {
+    background: rgba(245, 158, 11, 0.2);
+}
+
+.task-content {
+    flex: 1;
+}
+
+.task-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.task-due {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.task-status {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.task-status.pending {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--accent-gold);
+}
+
+.task-status.progress {
+    background: rgba(59, 130, 246, 0.2);
+    color: var(--accent-blue);
+}
+
+.task-status.done {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--accent-green);
+}
+
+/* Task Controls Polish */
+.task-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: var(--accent-green);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin: 0 4px;
+}
+
+.task-checkbox:hover {
+    transform: scale(1.3);
+    filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.6));
+}
+
+.task-delete-btn {
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 20px;
+    padding: 4px;
+    line-height: 1;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.task-delete-btn:hover {
+    color: #ff4757;
+    background: rgba(255, 71, 87, 0.1);
+    transform: scale(1.2) rotate(90deg);
+    text-shadow: 0 0 10px rgba(255, 71, 87, 0.5);
+}
+
+.skill-gap-mini {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.skill-mini-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.skill-mini-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.15);
+    transform: translateY(-2px);
+}
+
+.skill-mini-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    background: rgba(239, 68, 68, 0.15);
+}
+
+.skill-mini-name {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.skill-mini-priority {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--accent-red);
+}
+
+.skill-mini-priority.medium {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--accent-gold);
+}
+
+
+
+
+.simple-chart-container {
+    margin-bottom: 24px;
+    height: 100px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+.chart-bar-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+}
+
+.chart-bar {
+    width: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.chart-bar.active {
+    background: var(--accent-green);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+}
+
+.chart-day {
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+.section-subtitle {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    background: var(--glass-bg);
+    border-radius: 8px;
+    border: 1px solid transparent;
+    transition: 0.2s;
+}
+
+.activity-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.activity-icon {
+    width: 32px;
+    height: 32px;
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--accent-green);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.activity-info {
+    flex: 1;
+}
+
+.activity-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+}
+
+.activity-date {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.activity-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--accent-green);
+    font-weight: 600;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.empty-state-text {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-muted);
+    padding: 20px;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--glass-bg);
+    padding: 24px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 400px;
+    border: 1px solid var(--glass-border);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    box-shadow: 0 20px 60px -10px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.modal-title {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.modal-close {
+    cursor: pointer;
+    color: var(--text-muted);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.form-select {
+    width: 100%;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: white;
+    outline: none;
+}
+
+.form-select option {
+    background: #1a1a1a;
+}
+
+.btn-add-item {
+    width: 100%;
+    padding: 10px;
+    background: var(--accent-green);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.add-icon-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--accent-green);
+    transition: 0.2s;
+    text-decoration: none;
+}
+
+
+
+.badge-system {
+    background: rgba(59, 130, 246, 0.1);
+    color: #60a5fa;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+/* Task Filter Tabs */
+.task-filter-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 16px;
+    padding: 4px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.task-filter-tab {
+    flex: 1;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.task-filter-tab:hover {
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.task-filter-tab.active {
+    color: white;
+    background: rgba(59, 130, 246, 0.2);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+/* Task completion date */
+.task-completed-date {
+    font-size: 11px;
+    color: var(--accent-green);
+    opacity: 0.8;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.task-completed-date::before {
+    content: '✓';
+    font-size: 10px;
+}

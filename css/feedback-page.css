@@ -1,0 +1,235 @@
+.score-hero {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(99, 102, 241, 0.1));
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 32px;
+}
+
+.score-circle {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    flex-shrink: 0;
+}
+
+.score-circle svg {
+    transform: rotate(-90deg);
+}
+
+.score-circle circle {
+    fill: none;
+    stroke-width: 8;
+}
+
+.score-circle .bg {
+    stroke: rgba(255, 255, 255, 0.1);
+}
+
+.score-circle .progress {
+    stroke: var(--accent-green);
+    stroke-dasharray: 283;
+    stroke-dashoffset: 79;
+    stroke-linecap: round;
+}
+
+.score-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.score-value span {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--accent-green);
+}
+
+.score-value small {
+    font-size: 18px;
+    color: var(--text-muted);
+}
+
+.score-summary h2 {
+    font-size: 28px;
+    margin-bottom: 12px;
+}
+
+.score-summary p {
+    color: var(--text-secondary);
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.scores-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 32px;
+}
+
+@media (max-width: 1024px) {
+    .scores-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .score-hero {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+.score-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.score-card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 12px;
+}
+
+.score-card-icon.green {
+    background: rgba(16, 185, 129, 0.15);
+}
+
+.score-card-icon.blue {
+    background: rgba(59, 130, 246, 0.15);
+}
+
+.score-card-icon.gold {
+    background: rgba(245, 158, 11, 0.15);
+}
+
+.score-card-icon.purple {
+    background: rgba(139, 92, 246, 0.15);
+}
+
+.score-card-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.score-card-value {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.feedback-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+@media (max-width: 768px) {
+    .feedback-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.feedback-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.feedback-item {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    border-radius: 12px;
+}
+
+.feedback-item.positive {
+    background: rgba(16, 185, 129, 0.08);
+}
+
+.feedback-item.negative {
+    background: rgba(239, 68, 68, 0.08);
+}
+
+.feedback-icon {
+    font-size: 20px;
+}
+
+.feedback-item strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.feedback-item p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.question-feedback-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.question-feedback-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+}
+
+.question-number {
+    width: 32px;
+    height: 32px;
+    background: rgba(99, 102, 241, 0.15);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent-primary);
+}
+
+.question-text-small {
+    flex: 1;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.question-score {
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+}
+
+.question-score.good {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--accent-green);
+}
+
+.question-score.ok {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--accent-gold);
+}
+
+.question-score.poor {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--accent-red);
+}

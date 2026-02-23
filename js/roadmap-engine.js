@@ -184,8 +184,20 @@ function normalizeTopicModules(topic, role) {
     const difficulty = topic.difficulty || 'intermediate';
     const isCore = topic.isCore || isCoreTopic(topic.name, role);
 
-    // Case 1: AI provided proper modules array — trust the AI's module count
+    // Case 1: AI provided proper modules array
+    // BUT enforce minimum modules for topics with many total subtopics
     if (topic.modules && Array.isArray(topic.modules) && topic.modules.length > 0) {
+        // Count total subtopics across all AI modules
+        const totalSubtopics = topic.modules.reduce((sum, m) => sum + (m.subtopics?.length || 0), 0);
+        const expectedMin = calculateModuleCount(totalSubtopics, difficulty, isCore);
+
+        // If AI gave too few modules for the content volume, re-split from flat subtopics
+        if (topic.modules.length < expectedMin && totalSubtopics > 6) {
+            console.log(`[RoadmapEngine] ⚠️ AI gave ${topic.modules.length} modules for "${topic.name}" (${totalSubtopics} subtopics), re-splitting to ${expectedMin}`);
+            const allSubtopics = topic.modules.flatMap(m => m.subtopics || []);
+            return generateDynamicModulesFromItems(topic.name, allSubtopics, role, difficulty);
+        }
+
         // Normalize each module to ensure all fields exist
         return topic.modules.map(mod => ({
             title: mod.title || 'Untitled Module',

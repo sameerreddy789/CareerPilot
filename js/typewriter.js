@@ -46,9 +46,9 @@
 
         // Canvas overlaid absolutely during vaporize only
         canvas = document.createElement('canvas');
-        canvas.style.cssText = 'display:none;position:absolute;top:0;left:0;pointer-events:none;';
+        canvas.style.cssText = 'display:none;position:absolute;top:0;left:0;pointer-events:none;background:transparent;';
         host.appendChild(canvas);
-        ctx = canvas.getContext('2d');
+        ctx = canvas.getContext('2d', { alpha: true });
 
         charIndex = 0;
         typeStep();
@@ -147,6 +147,7 @@
         // Keep layout space, overlay canvas on top
         textSpan.style.visibility = 'hidden';
         canvas.style.display = 'block';
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // clear snapshot, particles will draw
 
         vaporizeProgress = 0;
         lastTime = performance.now();

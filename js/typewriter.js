@@ -118,7 +118,12 @@
         const fontFamily = cs.fontFamily;
         const spanRect = textSpan.getBoundingClientRect();
 
-        const cssW = Math.ceil(spanRect.width)  || 10;
+        // Measure actual rendered text width on a scratch canvas (avoids wrap clipping)
+        const tmpC = document.createElement('canvas').getContext('2d');
+        tmpC.font  = `${fontWeight} ${fontSize}px ${fontFamily}`;
+        const measuredW = Math.ceil(tmpC.measureText(textSpan.textContent).width) + 4;
+
+        const cssW = Math.max(measuredW, Math.ceil(spanRect.width) || 10);
         const cssH = Math.ceil(spanRect.height) || Math.ceil(fontSize * 1.3);
 
         // Size canvas to exactly match the span's rendered box
@@ -158,7 +163,7 @@
         const data    = imgData.data;
         const step    = Math.max(1, Math.round(dpr));
         particles     = [];
-        textW         = cssW;
+        textW         = measuredW;
 
         for (let y = 0; y < canvas.height; y += step) {
             for (let x = 0; x < canvas.width; x += step) {

@@ -368,20 +368,18 @@ body::after {
     z-index: 1;
 }
 
-/* Glassmorphic Pane for Hero Content - Hugs Content */
+/* Hero Content - No background pane */
 .hero-content {
-    background: rgba(15, 18, 25, 0.25);
-    backdrop-filter: blur(12px) saturate(140%);
-    -webkit-backdrop-filter: blur(12px) saturate(140%);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 32px;
-    padding: 60px 60px;
-    width: 1100px;
-    max-width: 1300px;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: none;
+    border-radius: 0;
+    padding: 60px 20px;
+    width: 100%;
+    max-width: 900px;
     margin: 0 auto;
-    box-shadow:
-        0 25px 60px rgba(0, 0, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    box-shadow: none;
     position: relative;
     z-index: 10;
     display: flex;

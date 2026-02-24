@@ -354,3 +354,255 @@ body {
     font-size: 0.75rem;
     color: var(--muted-foreground);
 }
+
+/* ── New Auth Form (left panel) ─────────────────────────────────────────────── */
+
+/* Grid background */
+.auth-grid-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke-width='1' stroke='rgba(99%2c102%2c241%2c0.12)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
+    pointer-events: none;
+}
+
+.auth-grid-fade {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 60% 50%, rgba(15,23,42,0) 0%, rgba(15,23,42,0.92) 70%);
+}
+
+/* Form wrapper */
+.auth-form-wrap {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 420px;
+    animation: af-fadein 0.7s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+@keyframes af-fadein {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Logo */
+.af-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 28px;
+}
+
+.af-logo-icon {
+    font-size: 26px;
+    background: rgba(99,102,241,0.15);
+    border: 1px solid rgba(99,102,241,0.3);
+    border-radius: 10px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.af-logo-text {
+    font-size: 20px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #6366f1, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Header */
+.af-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.af-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #f8fafc;
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+}
+
+.af-subtitle {
+    font-size: 0.875rem;
+    color: #94a3b8;
+}
+
+.af-subtitle a {
+    color: #818cf8;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.af-subtitle a:hover { text-decoration: underline; }
+
+/* Social buttons grid */
+.af-socials { margin-bottom: 20px; }
+
+.af-socials-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.af-social-btn {
+    position: relative;
+    z-index: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    color: #e2e8f0;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.af-social-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: rgba(255,255,255,0.07);
+    transform: translateX(110%) translateY(110%) scale(2.5);
+    border-radius: 100%;
+    transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+}
+
+.af-social-btn:hover { transform: scale(1.03); border-color: rgba(255,255,255,0.2); }
+.af-social-btn:hover::before { transform: translateX(0) translateY(0) scale(2.5); }
+.af-social-btn:active { transform: scale(0.97); }
+
+.af-social-btn--full {
+    grid-column: span 2;
+}
+
+/* Divider */
+.af-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0;
+    color: #475569;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.af-divider::before,
+.af-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+}
+
+/* Form fields */
+.af-form-group { margin-bottom: 16px; }
+
+.af-label {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #94a3b8;
+    margin-bottom: 6px;
+}
+
+.af-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.af-forgot {
+    font-size: 0.8125rem;
+    color: #818cf8;
+    text-decoration: none;
+}
+.af-forgot:hover { text-decoration: underline; }
+
+.af-input {
+    width: 100%;
+    height: 42px;
+    padding: 0 12px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    color: #f1f5f9;
+    font-size: 0.875rem;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.af-input::placeholder { color: #475569; }
+
+.af-input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.2);
+}
+
+/* Password wrapper reuse */
+.input-wrapper .af-input { padding-right: 40px; }
+
+/* Primary button */
+.af-btn-primary {
+    width: 100%;
+    height: 42px;
+    margin-top: 4px;
+    border-radius: 8px;
+    border: none;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: #fff;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 0 0 2px rgba(99,102,241,0.35), 0 4px 14px rgba(99,102,241,0.3);
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.af-btn-primary:hover {
+    transform: scale(1.015);
+    box-shadow: 0 0 0 2px rgba(99,102,241,0.5), 0 6px 20px rgba(99,102,241,0.4);
+}
+
+.af-btn-primary:active {
+    transform: scale(0.985);
+}
+
+/* Terms */
+.af-terms {
+    margin-top: 20px;
+    font-size: 0.75rem;
+    color: #475569;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.af-terms a {
+    color: #818cf8;
+    text-decoration: none;
+}
+.af-terms a:hover { text-decoration: underline; }
+
+/* Hint text */
+.af-hint {
+    display: block;
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-top: 5px;
+}

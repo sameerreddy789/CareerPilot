@@ -388,23 +388,18 @@ body::after {
     text-align: center;
 }
 
-#hero-typewriter::after {
-    content: '|';
-    animation: blink 1s linear infinite;
-    color: var(--accent-primary);
-    margin-left: 2px;
-    font-weight: 100;
-    opacity: 0.8;
+/* Vaporize canvas typewriter — override gradient text fill so canvas is visible */
+#hero-typewriter {
+    -webkit-text-fill-color: initial;
+    background: none;
+    background-clip: initial;
+    -webkit-background-clip: initial;
+    filter: none;
+    display: inline-block;
+    vertical-align: middle;
 }
 
-@keyframes blink {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0;
-    }
+/* Remove cursor blink — canvas handles its own rendering */
+#hero-typewriter::after {
+    content: none;
 }

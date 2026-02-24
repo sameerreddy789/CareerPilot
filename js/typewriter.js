@@ -16,7 +16,7 @@
 
     const TYPE_SPEED        = 85;   // ms per char
     const HOLD_DURATION     = 2400; // ms hold before vaporize
-    const VAPORIZE_DURATION = 1500; // ms for wave
+    const VAPORIZE_DURATION = 1125; // ms for wave (1500 * 0.75)
     const SPREAD            = 3.5;
     const DENSITY           = 0.70;
 
@@ -45,7 +45,7 @@
 
         // Text span — inherits .hero-title span gradient + font from CSS
         textSpan = document.createElement('span');
-        textSpan.style.cssText = 'display:inline;';
+        textSpan.style.cssText = 'display:inline-block; vertical-align:top;';
         host.appendChild(textSpan);
 
         // Cursor span — matches gradient style
@@ -64,9 +64,9 @@
         ].join(';');
         host.appendChild(cursorSpan);
 
-        // Canvas — hidden until vaporize, inline-block so it occupies same space
+        // Canvas — hidden until vaporize, same vertical-align as textSpan
         canvas = document.createElement('canvas');
-        canvas.style.cssText = 'display:none; vertical-align:baseline; pointer-events:none;';
+        canvas.style.cssText = 'display:none; vertical-align:top; pointer-events:none;';
         host.appendChild(canvas);
         ctx = canvas.getContext('2d');
 
@@ -133,7 +133,7 @@
         ctx.scale(dpr, dpr);
         ctx.font         = `${fontWeight} ${fontSize}px ${fontFamily}`;
         ctx.textAlign    = 'left';
-        ctx.textBaseline = 'top';
+        ctx.textBaseline = 'alphabetic';
 
         const grad = ctx.createLinearGradient(0, 0, cssW, 0);
         grad.addColorStop(0.00, '#ffffff');
@@ -145,11 +145,12 @@
         grad.addColorStop(1.00, '#ffffff');
         ctx.fillStyle = grad;
 
-        // Vertically center text in the canvas height
-        const metrics   = ctx.measureText(textSpan.textContent);
-        const textHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
-        const yOffset   = (cssH - textHeight) / 2 - metrics.actualBoundingBoxAscent * 0.05;
-        ctx.fillText(textSpan.textContent, 0, Math.max(0, yOffset));
+        // Place baseline so glyphs sit at same vertical position as the CSS span.
+        // actualBoundingBoxAscent = distance from baseline to top of glyph.
+        // We want the top of the glyph to be at y=0 (top of canvas = top of span).
+        const metrics  = ctx.measureText(textSpan.textContent);
+        const ascent   = metrics.actualBoundingBoxAscent;
+        ctx.fillText(textSpan.textContent, 0, ascent);
         ctx.restore();
 
         // Sample pixels → particles (in CSS px coords)
@@ -212,7 +213,7 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         particles = [];
 
-        textSpan.style.display  = 'inline';
+        textSpan.style.display  = 'inline-block';
         textSpan.textContent    = '';
         cursorSpan.style.display = 'inline';
 

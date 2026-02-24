@@ -185,6 +185,10 @@ function renderAnalysisResult(result, role) {
     // Sync Explorer
     selectedExplorerRole = role;
     updateExplorerUI();
+
+    // Show Create Roadmap FAB
+    const fab = document.getElementById('create-roadmap-fab');
+    if (fab) fab.classList.remove('hidden');
 }
 
 function renderCharts(data, userSkills) {

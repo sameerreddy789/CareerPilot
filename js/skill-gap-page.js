@@ -186,9 +186,16 @@ function renderAnalysisResult(result, role) {
     selectedExplorerRole = role;
     updateExplorerUI();
 
-    // Show Create Roadmap FAB
+    // Show Create Roadmap FAB only if roadmap hasn't been created yet
     const fab = document.getElementById('create-roadmap-fab');
-    if (fab) fab.classList.remove('hidden');
+    if (fab) {
+        const roadmapCreated = localStorage.getItem('nextStep_roadmapCompleted') === 'true';
+        if (roadmapCreated) {
+            fab.classList.add('hidden');
+        } else {
+            fab.classList.remove('hidden');
+        }
+    }
 }
 
 function renderCharts(data, userSkills) {

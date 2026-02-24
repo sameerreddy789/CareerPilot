@@ -5,11 +5,11 @@
     width: 100%;
     max-width: 1100px;
     margin: 0 auto;
-    padding: 40px 0 20px;
+    padding: 20px 0 40px;
     user-select: none;
 }
 
-/* 3D Stage */
+/* 3D Stage — overflow visible so side cards show, clip on wrapper */
 .steps3d-stage {
     position: relative;
     width: 100%;
@@ -19,13 +19,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    overflow: visible;
+}
+
+/* Clip wrapper so side cards don't bleed into other sections */
+.steps-slider::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
 }
 
 /* Individual Card */
 .steps3d-card {
     position: absolute;
-    width: 420px;
+    width: 400px;
     height: 440px;
     cursor: pointer;
     outline: none;
@@ -39,11 +47,11 @@
 
 /* Card positioning via custom properties */
 .steps3d-card {
-    --tx: calc(var(--offset) * 320px);
-    --tz: calc(var(--abs-offset) * -120px);
-    --sc: calc(1 - var(--abs-offset) * 0.12);
-    --ry: calc(var(--offset) * -8deg);
-    --op: calc(1 - var(--abs-offset) * 0.35);
+    --tx: calc(var(--offset) * 280px);
+    --tz: calc(var(--abs-offset) * -100px);
+    --sc: calc(1 - var(--abs-offset) * 0.1);
+    --ry: calc(var(--offset) * -6deg);
+    --op: calc(1 - var(--abs-offset) * 0.38);
 
     transform:
         translateX(var(--tx))
@@ -51,7 +59,6 @@
         scale(var(--sc))
         rotateY(var(--ry));
     opacity: var(--op);
-    /* z-index set by JS */
     filter: blur(calc(var(--abs-offset) * 1.5px));
 }
 
@@ -85,7 +92,7 @@
         0 20px 60px -15px rgba(0, 0, 0, 0.5),
         0 0 0 1px rgba(255, 255, 255, 0.04) inset;
     transition: box-shadow 600ms cubic-bezier(0.23, 1, 0.32, 1);
-    pointer-events: none; /* card element handles all clicks */
+    pointer-events: none;
 }
 
 /* Active card glow */
@@ -119,45 +126,48 @@
     background: linear-gradient(
         0deg,
         rgba(0, 0, 0, 0.88) 0%,
-        rgba(0, 0, 0, 0.45) 45%,
-        rgba(0, 0, 0, 0.1) 100%
+        rgba(0, 0, 0, 0.5) 50%,
+        rgba(0, 0, 0, 0.15) 100%
     );
     pointer-events: none;
 }
 
-/* Content */
+/* Content — column: badge top-center, text at bottom */
 .steps3d-content {
     position: relative;
     z-index: 3;
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding: 24px 28px 28px;
+    align-items: flex-start;
+    padding: 20px 28px 28px;
     pointer-events: none;
 }
 
-/* Step number badge - top center */
+/* Step number badge — top center */
 .steps3d-num {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: linear-gradient(135deg, #6366f1, #8b5cf6);
     color: #fff;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 700;
     font-family: 'Inter', sans-serif;
+    /* Center horizontally at top */
     align-self: center;
-    margin-bottom: auto;
-    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
     flex-shrink: 0;
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+    /* Push title/desc to bottom */
+    margin-bottom: auto;
 }
 
 /* Title & description at bottom */
 .steps3d-title {
-    font-size: 1.5rem;
+    font-size: 1.45rem;
     font-weight: 700;
     color: #fff;
     margin-bottom: 8px;
@@ -166,10 +176,10 @@
 }
 
 .steps3d-desc {
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     color: rgba(255, 255, 255, 0.8);
     line-height: 1.55;
-    max-width: 360px;
+    max-width: 340px;
 }
 
 /* ===== Navigation ===== */
@@ -283,10 +293,10 @@
     }
 
     .steps3d-card {
-        width: 360px;
+        width: 340px;
         height: 400px;
-        --tx: calc(var(--offset) * 260px);
-        --tz: calc(var(--abs-offset) * -100px);
+        --tx: calc(var(--offset) * 230px);
+        --tz: calc(var(--abs-offset) * -80px);
     }
 }
 

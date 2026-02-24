@@ -48,20 +48,9 @@
         textSpan.style.cssText = 'display:inline-block; vertical-align:top;';
         host.appendChild(textSpan);
 
-        // Cursor span — matches gradient style
+        // No cursor
         cursorSpan = document.createElement('span');
-        cursorSpan.textContent = '|';
-        cursorSpan.style.cssText = [
-            'display:inline',
-            'margin-left:3px',
-            'font-weight:200',
-            'background:linear-gradient(105deg,#a78bfa,#f472b6)',
-            '-webkit-background-clip:text',
-            'background-clip:text',
-            '-webkit-text-fill-color:transparent',
-            'opacity:1',
-            'transition:opacity 0.12s'
-        ].join(';');
+        cursorSpan.style.display = 'none';
         host.appendChild(cursorSpan);
 
         // Canvas — hidden until vaporize, same vertical-align as textSpan
@@ -75,21 +64,8 @@
         typeStep();
     }
 
-    // ── Cursor ─────────────────────────────────────────────────────────────────
-    function startCursorBlink() {
-        clearInterval(cursorBlink);
-        cursorVisible = true;
-        cursorSpan.style.opacity = '1';
-        cursorBlink = setInterval(() => {
-            cursorVisible = !cursorVisible;
-            cursorSpan.style.opacity = cursorVisible ? '1' : '0';
-        }, 530);
-    }
-
-    function stopCursor(show) {
-        clearInterval(cursorBlink);
-        cursorSpan.style.opacity = show ? '1' : '0';
-    }
+    function startCursorBlink() {}
+    function stopCursor() {}
 
     // ── Typing ─────────────────────────────────────────────────────────────────
     function typeStep() {

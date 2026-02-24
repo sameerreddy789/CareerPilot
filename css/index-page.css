@@ -388,17 +388,7 @@ body::after {
     text-align: center;
 }
 
-/* Typewriter wrapper — inline-block with fixed height to prevent layout shifts */
-#hero-typewriter-wrap {
-    display: inline-block;
-    position: relative;
-    vertical-align: top;
-    /* height locked to one line of the hero font so nothing jumps */
-    min-height: 1.15em;
-    will-change: transform;
-}
-
-/* Inner text span — inherits gradient from .hero-title span */
+/* Typewriter span — inherits gradient from .hero-title span */
 #hero-typewriter {
     display: inline;
     white-space: nowrap;

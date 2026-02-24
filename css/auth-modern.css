@@ -443,7 +443,7 @@ body {
 
 .af-subtitle a:hover { text-decoration: underline; }
 
-/* Social buttons grid */
+/* Social buttons */
 .af-socials { margin-bottom: 20px; }
 
 .af-socials-grid {
@@ -488,6 +488,8 @@ body {
 
 .af-social-btn--full {
     grid-column: span 2;
+    height: 42px;
+    font-size: 0.9375rem;
 }
 
 /* Divider */

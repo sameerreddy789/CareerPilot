@@ -573,6 +573,8 @@ async function saveResumeToDatabase(data) {
         }, { merge: true });
 
         console.log('[Database] ✅ Resume analysis saved successfully');
+        // Invalidate appState cache so next page load re-fetches fresh data
+        localStorage.removeItem('nextStep_appState_cache');
     } catch (error) {
         console.error('[Database] ❌ Error saving resume:', error);
     }

@@ -230,6 +230,7 @@ window.initRoadmap = async function (role, isSample, skillGaps = [], aiData = nu
                 localStorage.setItem('nextStep_roadmap', JSON.stringify({ weeks: sectionsData }));
                 console.log('[RoadmapUI] 💾 Saved roadmap with dynamic modules');
                 appState.roadmap = { weeks: sectionsData, totalTasks: totalTasks };
+                appState.invalidateCache(); // Force re-fetch next load
             }
         } catch (e) {
             console.error('[RoadmapUI] ❌ Generation failed:', e);

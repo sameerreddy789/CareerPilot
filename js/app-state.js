@@ -2,6 +2,9 @@ import { auth, db } from './firebase-config.js';
 import { doc, getDoc, setDoc, updateDoc, onSnapshot, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+const APP_STATE_CACHE_KEY = 'nextStep_appState_cache';
+const APP_STATE_CACHE_TTL = 60 * 60 * 1000; // 1 hour
+
 /**
  * Global State Manager
  * Single source of truth for the application.
@@ -24,17 +27,30 @@ export const appState = {
 
     /**
      * Initialize the app state
-     * Fetches all data from Firestore for the current user
+     * Tries localStorage cache first, falls back to Firestore
      */
-    init() {
+    init(forceRefresh = false) {
         return new Promise((resolve) => {
             onAuthStateChanged(auth, async (user) => {
                 if (user) {
                     this.user = user;
-                    console.log('[AppState] 🔄 User detected, fetching full state...');
+
+                    // Try cache first (unless force refresh)
+                    if (!forceRefresh) {
+                        const hydrated = this._hydrateFromCache(user.uid);
+                        if (hydrated) {
+                            console.log('[AppState] ⚡ Loaded from localStorage cache');
+                            this.notifyListeners();
+                            resolve(true);
+                            return;
+                        }
+                    }
+
+                    console.log('[AppState] 🔄 Fetching from Firestore...');
                     const success = await this.fetchAllData(user.uid);
                     if (success) {
-                        console.log('[AppState] ✅ State initialized');
+                        this._saveToCache(user.uid);
+                        console.log('[AppState] ✅ State initialized & cached');
                     } else {
                         console.warn('[AppState] ⚠️ State initialized with partial data');
                     }
@@ -47,6 +63,76 @@ export const appState = {
                 }
             });
         });
+    },
+
+    /**
+     * Save current state to localStorage with timestamp
+     */
+    _saveToCache(uid) {
+        try {
+            const cache = {
+                uid,
+                timestamp: Date.now(),
+                resumeData: this.resumeData,
+                skillGap: this.skillGap,
+                roadmap: this.roadmap,
+                roadmapProgress: this.roadmapProgress,
+                interviews: this.interviews,
+                learningActivity: this.learningActivity,
+                userProfile: this.user ? {
+                    displayName: this.user.displayName,
+                    email: this.user.email,
+                    photoURL: this.user.photoURL,
+                    uid: this.user.uid,
+                    targetRole: this.user.targetRole,
+                    jobReadyTimeline: this.user.jobReadyTimeline,
+                    dailyCommitment: this.user.dailyCommitment,
+                    onboardingComplete: this.user.onboardingComplete
+                } : null
+            };
+            localStorage.setItem(APP_STATE_CACHE_KEY, JSON.stringify(cache));
+        } catch (e) {
+            console.warn('[AppState] Cache save failed:', e);
+        }
+    },
+
+    /**
+     * Hydrate state from localStorage cache if fresh and same user
+     * Returns true if cache was valid and used
+     */
+    _hydrateFromCache(uid) {
+        try {
+            const raw = localStorage.getItem(APP_STATE_CACHE_KEY);
+            if (!raw) return false;
+            const cache = JSON.parse(raw);
+            if (!cache || cache.uid !== uid) return false;
+            if (Date.now() - cache.timestamp > APP_STATE_CACHE_TTL) return false;
+
+            this.resumeData = cache.resumeData;
+            this.skillGap = cache.skillGap;
+            this.roadmap = cache.roadmap;
+            this.roadmapProgress = cache.roadmapProgress;
+            this.interviews = cache.interviews || [];
+            this.learningActivity = cache.learningActivity || {};
+            if (cache.userProfile) {
+                this.user = { ...this.user, ...cache.userProfile };
+            }
+
+            this.calculateReadiness();
+            this.generateTasksList();
+            return true;
+        } catch (e) {
+            console.warn('[AppState] Cache hydration failed:', e);
+            return false;
+        }
+    },
+
+    /**
+     * Invalidate the cache (call after writes like resume upload, interview completion)
+     */
+    invalidateCache() {
+        localStorage.removeItem(APP_STATE_CACHE_KEY);
+        console.log('[AppState] 🗑️ Cache invalidated');
     },
 
     /**
@@ -250,6 +336,7 @@ export const appState = {
         this.tasks = [];
         this.readinessScore = 0;
         this.learningActivity = {};
+        this.invalidateCache();
         this.notifyListeners();
     }
 };

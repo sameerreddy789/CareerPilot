@@ -1137,6 +1137,8 @@ async function saveInterviewToDatabase(data) {
         }, { merge: true });
 
         console.log('[Database] ✅ Interview results saved successfully');
+        // Invalidate appState cache so next page load re-fetches fresh data
+        localStorage.removeItem('nextStep_appState_cache');
 
         // Update AppState
         if (appState.interviews) {

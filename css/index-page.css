@@ -388,18 +388,14 @@ body::after {
     text-align: center;
 }
 
-/* Vaporize canvas typewriter — override gradient text fill so canvas is visible */
+/* Typewriter host — inline so it flows naturally inside .hero-title */
 #hero-typewriter {
-    -webkit-text-fill-color: initial;
-    background: none;
-    background-clip: initial;
-    -webkit-background-clip: initial;
-    filter: none;
-    display: inline-block;
-    vertical-align: middle;
+    display: inline;
+    position: relative;
+    /* Inherit gradient from .hero-title span — no overrides needed */
 }
 
-/* Remove cursor blink — canvas handles its own rendering */
+/* No pseudo-element cursor — JS handles it */
 #hero-typewriter::after {
     content: none;
 }

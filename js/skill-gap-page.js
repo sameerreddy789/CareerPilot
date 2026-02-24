@@ -57,6 +57,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialize Explorer Content
     initExplorer();
 
+    // Wait for SkillGapCache module to be ready (module scripts are deferred)
+    await new Promise(resolve => {
+        if (window.SkillGapCache) return resolve();
+        let attempts = 0;
+        const check = setInterval(() => {
+            attempts++;
+            if (window.SkillGapCache || attempts > 20) {
+                clearInterval(check);
+                resolve();
+            }
+        }, 50);
+    });
+
+    // Initialize Firestore cache auth
+    if (window.SkillGapCache) {
+        await window.SkillGapCache.init();
+    }
+
     // Initial Analysis
     performAnalysis(initialRole);
 });
@@ -65,18 +83,32 @@ async function performAnalysis(role, forceRefresh = false) {
     const loading = document.getElementById('loading-overlay');
     const results = document.getElementById('skills-results');
 
-    // Cache Key
+    // Cache Key (localStorage)
     const cacheKey = `nextStep_skillGap_${role.toLowerCase().replace(/\s+/g, '_')}`;
 
-    // Check Cache
+    // Check Firestore cache first (persistent across sessions)
+    if (!forceRefresh && window.SkillGapCache) {
+        try {
+            const firestoreResult = await window.SkillGapCache.load(role);
+            if (firestoreResult) {
+                // Also update localStorage for instant access next time
+                localStorage.setItem(cacheKey, JSON.stringify({ timestamp: Date.now(), data: firestoreResult }));
+                renderAnalysisResult(firestoreResult, role);
+                return;
+            }
+        } catch (e) {
+            console.warn('[SkillGap] Firestore cache check failed, continuing...', e);
+        }
+    }
+
+    // Check localStorage cache
     if (!forceRefresh) {
         const cachedRaw = localStorage.getItem(cacheKey);
         if (cachedRaw) {
             try {
                 const cached = JSON.parse(cachedRaw);
-                // Optional: Check expiry (e.g., 24 hours). For now, we trust it until manual refresh.
                 if (cached && cached.timestamp && (Date.now() - cached.timestamp < 24 * 60 * 60 * 1000)) {
-                    console.log('[SkillGap] ⚡ Loading from cache:', role);
+                    console.log('[SkillGap] ⚡ Loading from localStorage cache:', role);
                     renderAnalysisResult(cached.data, role);
                     return;
                 }
@@ -112,13 +144,18 @@ async function performAnalysis(role, forceRefresh = false) {
         // AI Analysis
         const result = await window.GeminiService.analyzeSkillGap(userSkills, role);
 
-        // Save to Cache
+        // Save to localStorage
         const cacheData = {
             timestamp: Date.now(),
             data: result
         };
         localStorage.setItem(cacheKey, JSON.stringify(cacheData));
         console.log('[SkillGap] 💾 Saved analysis to cache:', cacheKey);
+
+        // Save to Firestore for persistence across sessions
+        if (window.SkillGapCache) {
+            window.SkillGapCache.save(role, result);
+        }
 
         // Render UI
         renderAnalysisResult(result, role);

@@ -112,13 +112,19 @@ function generateSidebar() {
             </a>
         </div>
         <nav class="sidebar-nav">
-            ${SIDEBAR_CONFIG.mainNav.map(item => `
-
-                <a href="${item.href}" class="sidebar-link ${currentPage === item.href ? 'active' : ''}" data-tooltip="${item.text}">
+            ${SIDEBAR_CONFIG.mainNav.map(item => {
+                const isRoadmap = item.href === 'roadmap.html';
+                const skillGapDone = localStorage.getItem('nextStep_skillGapCompleted') === 'true';
+                const isLocked = isRoadmap && !skillGapDone;
+                const lockClass = isLocked ? ' locked' : '';
+                const lockAttr = isLocked ? ' title="Complete Skill Gap Analysis first"' : '';
+                return `
+                <a href="${isLocked ? '#' : item.href}" class="sidebar-link ${currentPage === item.href ? 'active' : ''}${lockClass}" data-tooltip="${item.text}"${lockAttr}${isLocked ? ' data-locked="true"' : ''}>
                     <span class="sidebar-link-icon">${item.icon}</span>
                     <span class="sidebar-link-text">${item.text}</span>
+                    ${isLocked ? '<span class="lock-icon">🔒</span>' : ''}
                 </a>
-            `).join('')}
+            `}).join('')}
         </nav>
         <div class="sidebar-progress-card">
             <div class="progress-main-row">
@@ -158,6 +164,24 @@ function generateSidebar() {
     let sidebar = document.querySelector('.sidebar');
     if (sidebar) {
         sidebar.innerHTML = sidebarHTML;
+    }
+
+    // Handle locked sidebar links
+    document.querySelectorAll('.sidebar-link[data-locked="true"]').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (window.showToast) window.showToast('Complete Skill Gap Analysis and add skills to your plan first', 'info');
+        });
+    });
+
+    // Gate "Resume Roadmap" button too
+    const skillGapDone = localStorage.getItem('nextStep_skillGapCompleted') === 'true';
+    const resumeBtn = document.querySelector('.progress-action-btn[href="roadmap.html"]');
+    if (resumeBtn && !skillGapDone) {
+        resumeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (window.showToast) window.showToast('Complete Skill Gap Analysis and add skills to your plan first', 'info');
+        });
     }
 
     /* Inject Logout Modal */

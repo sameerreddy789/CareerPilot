@@ -1285,6 +1285,22 @@ pre {
     height: 20px;
 }
 
+.sidebar-link.locked {
+    opacity: 0.4;
+    cursor: not-allowed;
+    position: relative;
+}
+
+.sidebar-link.locked:hover {
+    background: transparent;
+    color: var(--text-muted);
+}
+
+.sidebar-link .lock-icon {
+    font-size: 12px;
+    margin-left: auto;
+}
+
 .sidebar-footer {
     padding: var(--spacing-md);
     border-top: 1px solid rgba(255, 255, 255, 0.08);

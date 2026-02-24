@@ -14,10 +14,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     const userRole = userData.targetRole || 'sde';
 
     const roadmapData = JSON.parse(localStorage.getItem('nextStep_roadmap') || '{"skills":[]}');
-    const skillGaps = appState.skillGap || roadmapData.skills || [];
+    const planSkills = JSON.parse(localStorage.getItem('nextStep_roadmapPlan') || '[]');
+    const skillGaps = planSkills.length > 0
+        ? planSkills.map(name => ({ name, priority: 'must-have' }))
+        : (appState.skillGap || roadmapData.skills || []);
 
     // Gated Access Logic
-    if (!hasInterview && !hasResume) {
+    const skillGapDone = localStorage.getItem('nextStep_skillGapCompleted') === 'true';
+    if (!skillGapDone) {
+        document.getElementById('gated-modal').classList.remove('hidden');
+        const gatedTitle = document.querySelector('#gated-modal h2, #gated-modal .gated-title');
+        if (gatedTitle) gatedTitle.textContent = 'Complete Skill Gap Analysis First';
+        const gatedDesc = document.querySelector('#gated-modal p, #gated-modal .gated-desc');
+        if (gatedDesc) gatedDesc.textContent = 'Visit the Skill Gap page and add skills to your plan before accessing the Roadmap.';
+    } else if (!hasInterview && !hasResume) {
         document.getElementById('gated-modal').classList.remove('hidden');
     } else {
         // Let roadmap-ui.js handle ALL generation logic (single orchestrator)

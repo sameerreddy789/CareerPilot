@@ -286,6 +286,25 @@ function renderSkillColumns(skills, userSkills) {
 
     if (!skills) return;
 
+    // Load existing plan
+    const plan = JSON.parse(localStorage.getItem('nextStep_roadmapPlan') || '[]');
+    const planSet = new Set(plan.map(s => s.toLowerCase()));
+
+    // Auto-add all must-have missing skills to the plan
+    const mustHaveMissing = skills.filter(s => {
+        const isMustHave = (s.priority || 'must-have') === 'must-have';
+        const isPresent = userSkills.some(u => u.toLowerCase() === s.name.toLowerCase());
+        return isMustHave && !isPresent;
+    });
+    mustHaveMissing.forEach(s => {
+        if (!planSet.has(s.name.toLowerCase())) {
+            plan.push(s.name);
+            planSet.add(s.name.toLowerCase());
+        }
+    });
+    localStorage.setItem('nextStep_roadmapPlan', JSON.stringify(plan));
+    updateRoadmapGate();
+
     skills.forEach((skill, index) => {
         const type = skill.priority || 'must-have';
         const container = containers[type] || containers['must-have'];
@@ -298,6 +317,19 @@ function renderSkillColumns(skills, userSkills) {
         const statusClass = isPresent ? 'present' : 'missing';
         const statusText = isPresent ? 'Have' : 'Missing';
         const icon = getIconForSkill(skill.name);
+        const isMustHave = type === 'must-have';
+        const isInPlan = planSet.has(skill.name.toLowerCase());
+
+        // Must-have missing skills: show "Added ✓" (auto-added), no button
+        // Good-to-have / future-proof missing skills: show "Add to Plan" button or "Added ✓"
+        let footerAction = '';
+        if (!isPresent) {
+            if (isMustHave || isInPlan) {
+                footerAction = `<span class="added-badge">Added ✓</span>`;
+            } else {
+                footerAction = `<button class="add-btn" onclick="addToRoadmap('${skill.name}', this)">+ Add to Plan</button>`;
+            }
+        }
 
         const card = document.createElement('div');
         card.className = 'skill-card animate-in';
@@ -313,7 +345,7 @@ function renderSkillColumns(skills, userSkills) {
             <div class="skill-desc">${skill.reason || 'Required for this role'}</div>
             <div class="skill-footer">
                 <small class="text-muted">High Relevance</small>
-                ${!isPresent ? `<button class="add-btn" onclick="addToRoadmap('${skill.name}')">+ Add to Plan</button>` : ''}
+                ${footerAction}
             </div>
         `;
         container.appendChild(card);
@@ -329,9 +361,67 @@ function renderSkillColumns(skills, userSkills) {
     if (countFuture) countFuture.textContent = counts['future-proof'];
 }
 
-function addToRoadmap(skillName) {
-    // Mock logic for adding to roadmap
-    window.showToast(`Active: Added ${skillName} to your roadmap!`, 'success');
+function addToRoadmap(skillName, btnEl) {
+    const plan = JSON.parse(localStorage.getItem('nextStep_roadmapPlan') || '[]');
+    if (!plan.some(s => s.toLowerCase() === skillName.toLowerCase())) {
+        plan.push(skillName);
+        localStorage.setItem('nextStep_roadmapPlan', JSON.stringify(plan));
+    }
+
+    // Invalidate roadmap cache so it regenerates with new skills
+    localStorage.removeItem('nextStep_appState_cache');
+    localStorage.removeItem('nextStep_roadmap');
+
+    // Swap button to "Added ✓"
+    if (btnEl) {
+        btnEl.outerHTML = `<span class="added-badge">Added ✓</span>`;
+    }
+
+    updateRoadmapGate();
+    if (window.showToast) window.showToast(`Added ${skillName} to your roadmap plan`, 'success');
+}
+
+/** Update roadmap gate: unlock sidebar Roadmap link if plan has skills */
+function updateRoadmapGate() {
+    const plan = JSON.parse(localStorage.getItem('nextStep_roadmapPlan') || '[]');
+    const hasSkills = plan.length > 0;
+
+    // Mark that skill gap was visited and plan exists
+    if (hasSkills) {
+        localStorage.setItem('nextStep_skillGapCompleted', 'true');
+    }
+
+    // Update sidebar Roadmap link if it exists on this page
+    const roadmapLink = document.querySelector('.sidebar-link[href="roadmap.html"]');
+    if (roadmapLink) {
+        if (hasSkills) {
+            roadmapLink.classList.remove('locked');
+            roadmapLink.removeAttribute('title');
+            roadmapLink.onclick = null;
+        } else {
+            roadmapLink.classList.add('locked');
+            roadmapLink.setAttribute('title', 'Complete Skill Gap Analysis first');
+            roadmapLink.onclick = (e) => {
+                e.preventDefault();
+                if (window.showToast) window.showToast('Add skills to your plan from Skill Gap Analysis first', 'info');
+            };
+        }
+    }
+
+    // Also update the "Resume Roadmap" button in sidebar progress card
+    const resumeRoadmapBtn = document.querySelector('.progress-action-btn[href="roadmap.html"]');
+    if (resumeRoadmapBtn) {
+        if (hasSkills) {
+            resumeRoadmapBtn.classList.remove('locked');
+            resumeRoadmapBtn.onclick = null;
+        } else {
+            resumeRoadmapBtn.classList.add('locked');
+            resumeRoadmapBtn.onclick = (e) => {
+                e.preventDefault();
+                if (window.showToast) window.showToast('Add skills to your plan from Skill Gap Analysis first', 'info');
+            };
+        }
+    }
 }
 
 function getIconForSkill(name) {

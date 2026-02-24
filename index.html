@@ -37,18 +37,10 @@
     <link rel="stylesheet" href="css/magic-bento.css">
     <link rel="stylesheet" href="css/ui-utils.css">
     <link rel="stylesheet" href="css/glass-fx.css">
-    <link rel="stylesheet" href="css/theme-toggle.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <!-- GSAP for animations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <!-- Apply theme before render to prevent flash -->
-    <script>
-        (function() {
-            var t = localStorage.getItem('nextStep_theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', t);
-        })();
-    </script>
         <link rel="stylesheet" href="css/index-page.css">
 </head>
 
@@ -451,7 +443,6 @@
 
     <script src="js/env-config.js"></script>
 
-    <script src="js/theme-toggle.js"></script>
     <script src="js/pill-nav.js"></script>
     <script src="js/steps-slider.js"></script>
     <script src="js/orbital-timeline.js"></script>

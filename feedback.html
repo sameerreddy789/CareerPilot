@@ -13,7 +13,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="css/feedback-page.css?v=2">
-
+    <script src="js/env-config.js?v=2"></script>
+    <script src="js/ui-utils.js?v=2"></script>
+    <script src="js/route-guard.js?v=2"></script>
 </head>
 
 <body>
@@ -179,25 +181,119 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Mock question feedback
-            const questions = [
-                { q: 'Stack vs Queue difference', score: 85, rating: 'good' },
-                { q: 'Finding middle of linked list', score: 70, rating: 'ok' },
-                { q: 'URL shortening service design', score: 55, rating: 'poor' },
-                { q: 'JavaScript closures', score: 80, rating: 'good' },
-                { q: 'SQL vs NoSQL databases', score: 75, rating: 'good' },
-                { q: 'REST API principles', score: 72, rating: 'ok' },
-                { q: 'Two sum problem', score: 88, rating: 'good' },
-                { q: 'Rate limiting in APIs', score: 60, rating: 'ok' }
-            ];
+            // Load real interview data from localStorage
+            const raw = localStorage.getItem('nextStep_interview');
+            if (!raw) {
+                document.querySelector('.main-content').innerHTML = `
+                    <div class="page-header">
+                        <h1 class="page-title">📈 Interview Feedback</h1>
+                        <p class="page-subtitle">AI-powered analysis of your interview performance</p>
+                    </div>
+                    <div style="text-align:center; padding:60px 20px; color:#94a3b8;">
+                        <div style="font-size:48px; margin-bottom:16px;">🎤</div>
+                        <h2 style="color:#fff; margin-bottom:8px;">No Interview Data Yet</h2>
+                        <p style="margin-bottom:24px;">Complete an interview to see your detailed feedback here.</p>
+                        <a href="interview.html" class="btn btn-primary btn-lg">Take an Interview →</a>
+                    </div>
+                `;
+                return;
+            }
 
-            document.getElementById('question-list').innerHTML = questions.map((q, i) => `
-                <div class="question-feedback-item">
-                    <div class="question-number">${i + 1}</div>
-                    <div class="question-text-small">${q.q}</div>
-                    <span class="question-score ${q.rating}">${q.score}%</span>
-                </div>
-            `).join('');
+            let data;
+            try { data = JSON.parse(raw); } catch { return; }
+
+            const answers = data.answers || [];
+            const analysis = data.detailedAnalysis || {};
+            const overallScore = data.overallScore || analysis.overallScore || 0;
+
+            // Update overall score circle
+            const scoreCircle = document.getElementById('score-circle');
+            const overallEl = document.getElementById('overall-score');
+            if (scoreCircle) {
+                const circumference = 2 * Math.PI * 45;
+                const offset = circumference - (overallScore / 100) * circumference;
+                scoreCircle.style.strokeDasharray = circumference;
+                scoreCircle.style.strokeDashoffset = offset;
+                scoreCircle.style.stroke = overallScore > 75 ? '#10b981' : overallScore > 50 ? '#f59e0b' : '#ef4444';
+            }
+            if (overallEl) overallEl.textContent = overallScore;
+
+            // Update score summary text
+            const summaryH2 = document.querySelector('.score-summary h2');
+            const summaryP = document.querySelector('.score-summary p');
+            if (summaryH2) {
+                if (overallScore >= 80) summaryH2.textContent = 'Excellent Performance! 🌟';
+                else if (overallScore >= 60) summaryH2.textContent = 'Good Performance! 👏';
+                else if (overallScore >= 40) summaryH2.textContent = 'Room for Improvement 💪';
+                else summaryH2.textContent = 'Keep Practicing! 📚';
+            }
+            if (summaryP && analysis.summary) {
+                summaryP.textContent = analysis.summary;
+            }
+
+            // Update section scores from detailedAnalysis dimensions
+            const dims = analysis.dimensions || {};
+            const scoreCards = document.querySelectorAll('.score-card');
+            const dimKeys = ['technical', 'communication', 'confidence', 'problemSolving'];
+            const dimLabels = ['Technical Skills', 'Communication', 'Confidence', 'Problem Solving'];
+            const dimIcons = ['💻', '🗣️', '💪', '🎯'];
+
+            scoreCards.forEach((card, i) => {
+                const key = dimKeys[i];
+                const dimData = dims[key];
+                const score = dimData?.score || 0;
+                const iconEl = card.querySelector('.score-card-icon');
+                const labelEl = card.querySelector('.score-card-label');
+                const valueEl = card.querySelector('.score-card-value');
+                const fillEl = card.querySelector('.progress-fill');
+                if (iconEl) iconEl.textContent = dimIcons[i];
+                if (labelEl) labelEl.textContent = dimLabels[i];
+                if (valueEl) valueEl.textContent = score + '%';
+                if (fillEl) fillEl.style.width = score + '%';
+            });
+
+            // Render strengths
+            const strengthsList = document.querySelector('.card:has(.positive) .feedback-list') || document.querySelectorAll('.feedback-list')[0];
+            const weaknessList = document.querySelectorAll('.feedback-list')[1];
+
+            const strengths = analysis.strengths || [];
+            const improvements = analysis.improvements || [];
+
+            if (strengthsList && strengths.length > 0) {
+                strengthsList.innerHTML = strengths.map(s => `
+                    <div class="feedback-item positive">
+                        <span class="feedback-icon">💡</span>
+                        <div><strong>${s}</strong></div>
+                    </div>
+                `).join('');
+            }
+
+            if (weaknessList && improvements.length > 0) {
+                weaknessList.innerHTML = improvements.map(s => `
+                    <div class="feedback-item negative">
+                        <span class="feedback-icon">📐</span>
+                        <div><strong>${s}</strong></div>
+                    </div>
+                `).join('');
+            }
+
+            // Render question-wise breakdown from real answers
+            const questionList = document.getElementById('question-list');
+            if (questionList && answers.length > 0) {
+                questionList.innerHTML = answers.map((a, i) => {
+                    const score = a.evaluation?.score || 0;
+                    const rating = score >= 75 ? 'good' : score >= 50 ? 'ok' : 'poor';
+                    const qText = a.question || `Question ${i + 1}`;
+                    const esc = typeof UIUtils !== 'undefined' ? UIUtils.escapeHTML : (s) => s;
+                    return `
+                        <div class="question-feedback-item">
+                            <div class="question-number">${i + 1}</div>
+                            <div class="question-text-small">${esc(qText)}</div>
+                            <span class="question-score ${rating}">${score}%</span>
+                        </div>
+                    `;
+                }).join('');
+            }
         });
     </script>
     <script src="js/sidebar.js?v=3" type="module"></script>

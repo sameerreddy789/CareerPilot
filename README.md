@@ -185,18 +185,39 @@ This project is configured for **Firebase Hosting**.
    cd CareerPilot
    ```
 
-3. **Install Dependencies**
+3. **Create `js/env-config.js`**
+   This file is gitignored for security. Create it manually with your API keys:
+   ```js
+   window.ENV = {
+       VITE_FIREBASE_API_KEY: 'your_firebase_key',
+       VITE_FIREBASE_AUTH_DOMAIN: 'your_project.firebaseapp.com',
+       VITE_FIREBASE_DATABASE_URL: 'https://your_project.firebasedatabase.app',
+       VITE_FIREBASE_PROJECT_ID: 'your_project_id',
+       VITE_FIREBASE_STORAGE_BUCKET: 'your_project.appspot.com',
+       VITE_FIREBASE_MESSAGING_SENDER_ID: 'your_sender_id',
+       VITE_FIREBASE_APP_ID: 'your_app_id',
+       VITE_FIREBASE_MEASUREMENT_ID: 'your_measurement_id',
+       VITE_SERP_API_KEY: 'your_serp_api_key',
+       VITE_GEMINI_API_KEY_1: 'your_gemini_key_1',
+       VITE_GEMINI_API_KEY_2: 'your_gemini_key_2',
+       VITE_GEMINI_API_KEY_3: 'your_gemini_key_3',
+       VITE_GEMINI_API_KEY_4: 'your_gemini_key_4'
+   };
+   ```
+   Refer to `.env.example` for the full list of required keys.
+
+4. **Install Dependencies**
    ```bash
    npm install
    ```
 
-4. **Run Development Server**
+5. **Run Development Server**
    ```bash
    npm run dev
    ```
    Open http://localhost:5173 to view the app.
 
-5. **Build for Production**
+6. **Build for Production**
    ```bash
    npm run build
    ```

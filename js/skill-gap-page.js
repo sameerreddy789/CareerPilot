@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         roleInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 clearTimeout(debounceTimer);
-                const newRole = Math.round.value.trim();
+                const newRole = roleInput.value.trim();
                 if (newRole) performAnalysis(newRole);
             }
         });

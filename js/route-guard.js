@@ -2,7 +2,7 @@
 // Route Guard - Protects pages that require authentication
 // Now with Unified App Instance and Nuclear Blocking Loader + Retry Logic
 
-const PROTECTED_PAGES = ['dashboard.html', 'roadmap.html', 'interview.html', 'resume.html', 'studio.html'];
+const PROTECTED_PAGES = ['dashboard.html', 'roadmap.html', 'interview.html', 'resume.html', 'studio.html', 'skill-gap.html', 'feedback.html', 'profile.html'];
 const CURRENT_PAGE = window.location.pathname.split('/').pop();
 
 // Helper to get cookies (if needed, but we rely on Firebase Auth + LocalStorage)
@@ -45,13 +45,18 @@ function getCookie(name) {
             window.location.href = 'interview.html?restriction=1';
             return;
         }
-    } else if (CURRENT_PAGE === 'interview.html') {
+    } else if (CURRENT_PAGE === 'interview.html' || CURRENT_PAGE === 'skill-gap.html' || CURRENT_PAGE === 'feedback.html') {
         if (!state.onboarding) {
             window.location.href = 'onboarding.html';
             return;
         }
         if (!state.resume) {
             window.location.href = 'resume.html';
+            return;
+        }
+    } else if (CURRENT_PAGE === 'profile.html') {
+        if (!state.onboarding) {
+            window.location.href = 'onboarding.html';
             return;
         }
     } else if (CURRENT_PAGE === 'resume.html') {

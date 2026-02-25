@@ -1,3 +1,9 @@
+// ===== Production Log Suppressor =====
+// Silence console.log on production to keep the console clean
+if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+    console.log = function () {};
+}
+
 // ===== Loading States & UI Utilities =====
 
 /**

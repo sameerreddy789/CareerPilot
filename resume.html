@@ -7,6 +7,8 @@
     <title>Resume Analysis | NextStep AI</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <meta name="description" content="Upload and analyze your resume with AI-powered ATS scoring and skill detection.">
+    <meta name="theme-color" content="#6366f1">
+    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="css/styles.css?v=3">
     <link rel="stylesheet" href="css/animated-background.css?v=2">
     <link rel="stylesheet" href="css/page-transitions.css?v=2">
@@ -14,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <script src="js/env-config.js?v=2"></script>
-    <script src="js/ui-utils.js?v=2"></script>
+    <script src="js/ui-utils.js?v=3"></script>
     <script src="js/route-guard.js?v=2"></script>
     <script src="js/gemini-service.js?v=2"></script>
     <link rel="stylesheet" href="css/resume-page.css?v=2">
@@ -22,12 +24,13 @@
 </head>
 
 <body>
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
     <div class="app-container">
         <!-- Sidebar (populated by sidebar.js) -->
         <aside class="sidebar"></aside>
 
         <!-- Main Content -->
-        <main class="main-content">
+        <main class="main-content" id="main-content">
             <div class="page-header">
                 <h1 class="page-title">📄 Resume Analysis</h1>
                 <p class="page-subtitle">Upload your resume and let AI extract your skills and identify gaps</p>

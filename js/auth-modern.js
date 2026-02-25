@@ -4,7 +4,8 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     GoogleAuthProvider,
-    signInWithPopup
+    signInWithPopup,
+    sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
@@ -180,6 +181,31 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.textContent = "Create Account";
         }
     });
+
+    // FORGOT PASSWORD
+    window.handleForgotPassword = async () => {
+        const email = document.getElementById('login-email').value.trim();
+        if (!email) {
+            if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
+                UIUtils.showToast('Enter your email address first, then click Forgot', 'warning', 4000);
+            } else { alert('Please enter your email address first.'); }
+            return;
+        }
+        try {
+            await sendPasswordResetEmail(auth, email);
+            if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
+                UIUtils.showToast('Password reset email sent! Check your inbox.', 'success', 5000);
+            } else { alert('Password reset email sent! Check your inbox.'); }
+        } catch (error) {
+            console.error(error);
+            const friendlyMessage = window.FirebaseErrorHandler
+                ? window.FirebaseErrorHandler.getFriendlyFirebaseError(error)
+                : (error.message || 'Failed to send reset email.');
+            if (typeof UIUtils !== 'undefined' && UIUtils.showToast) {
+                UIUtils.showToast(friendlyMessage, 'error', 4000);
+            } else { alert(friendlyMessage); }
+        }
+    };
 
     // GOOGLE AUTH
     window.handleGoogleAuth = async () => {

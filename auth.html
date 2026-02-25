@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Authentication | NextStep AI</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="description" content="Sign in or create your NextStep AI account to start your AI-powered career journey.">
     <link rel="stylesheet" href="css/auth-modern.css?v=4">
     <link rel="stylesheet" href="css/ui-utils.css?v=2">
 
@@ -64,7 +65,7 @@
                         <div class="af-form-group">
                             <div class="af-label-row">
                                 <label class="af-label" for="login-password">Password</label>
-                                <a href="#" class="af-forgot">Forgot?</a>
+                                <a href="#" class="af-forgot" onclick="handleForgotPassword(); return false;">Forgot?</a>
                             </div>
                             <div class="input-wrapper">
                                 <input type="password" id="login-password" class="af-input" placeholder="••••••••••••" required>

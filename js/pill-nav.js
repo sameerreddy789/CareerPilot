@@ -37,7 +37,7 @@ class PillNav {
             <nav class="pill-nav">
                 <!-- Branding -->
                 <div class="nav-branding">
-                    <a class="pill-logo" href="index.html" aria-label="Home">
+                    <a class="pill-logo" href="/index.html" aria-label="Home">
                         <span class="logo-emoji">${logo}</span>
                     </a>
                     <span class="nav-brand-name">NextStep AI</span>
@@ -179,7 +179,7 @@ class PillNav {
         // Handle scroll to top for Home
         window.addEventListener('scroll', () => {
             if (window.scrollY < 100) {
-                const homeLink = document.querySelector('.pill-list .pill[href="index.html"]');
+                const homeLink = document.querySelector('.pill-list .pill[href="/index.html"]');
                 if (homeLink && !homeLink.classList.contains('is-active')) {
                     this.updateActiveLinkState(homeLink);
                 }
@@ -218,13 +218,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('pill-nav-container')) {
         new PillNav({
             items: [
-                { label: 'Home', href: 'index.html' },
+                { label: 'Home', href: '/index.html' },
                 { label: 'Features', href: '#features' },
                 { label: 'How It Works', href: '#how-it-works' },
                 { label: 'FAQs', href: '#faq' },
-                { label: 'Get Started', href: 'auth.html' }
+                { label: 'Get Started', href: '/pages/auth.html' }
             ],
-            activeHref: 'index.html'
+            activeHref: '/index.html'
         });
     }
 });

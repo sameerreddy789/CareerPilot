@@ -403,7 +403,7 @@ function updateRoadmapGate() {
     }
 
     // Update sidebar Roadmap link if it exists on this page
-    const roadmapLink = document.querySelector('.sidebar-link[href="roadmap.html"]');
+    const roadmapLink = document.querySelector('.sidebar-link[href="/pages/roadmap.html"]');
     if (roadmapLink) {
         if (hasSkills) {
             roadmapLink.classList.remove('locked');
@@ -420,7 +420,7 @@ function updateRoadmapGate() {
     }
 
     // Also update the "Resume Roadmap" button in sidebar progress card
-    const resumeRoadmapBtn = document.querySelector('.progress-action-btn[href="roadmap.html"]');
+    const resumeRoadmapBtn = document.querySelector('.progress-action-btn[href="/pages/roadmap.html"]');
     if (resumeRoadmapBtn) {
         if (hasSkills) {
             resumeRoadmapBtn.classList.remove('locked');

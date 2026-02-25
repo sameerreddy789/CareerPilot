@@ -140,15 +140,15 @@ NextStep-AI/
 ## 📊 Visual Documentation
 
 ### System Architecture
-![Architecture Diagram](architecture-diagram.png)
+![Architecture Diagram](docs/diagrams/architecture-diagram.png)
 *Complete system architecture showing client layer, application flow, and backend services*
 
 ### User Journey Flow
-![User Flow](user-flow-diagram.png)
+![User Flow](docs/diagrams/user-flow-diagram.png)
 *Sequential user journey from landing to dashboard (16:9 format)*
 
 ### UI Wireframes
-![UI Wireframes](ui-wireframes.png)
+![UI Wireframes](docs/diagrams/ui-wireframes.png)
 *Key screen wireframes: Landing, Dashboard, Interview, and Roadmap pages*
 
 ---

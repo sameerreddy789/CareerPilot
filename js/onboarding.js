@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check Auth & Redirect if already onboarded
     onAuthStateChanged(auth, async (user) => {
         if (!user) {
-            window.location.href = 'auth.html';
+            window.location.href = '/pages/auth.html';
             return;
         }
 
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         name: data.name || user.displayName || user.email.split('@')[0],
                         ...data
                     }));
-                    window.location.href = 'dashboard.html';
+                    window.location.href = '/pages/dashboard.html';
                     return;
                 }
 
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         name: data.name || user.displayName || user.email.split('@')[0],
                         ...data
                     }));
-                    window.location.href = 'resume.html';
+                    window.location.href = '/pages/resume.html';
                     return;
                 }
 
@@ -399,7 +399,7 @@ async function finishOnboarding() {
 
     // Redirect to Resume Analysis (Next Step in Flow)
     setTimeout(() => {
-        window.location.href = 'resume.html';
+        window.location.href = '/pages/resume.html';
     }, 1500);
 }
 

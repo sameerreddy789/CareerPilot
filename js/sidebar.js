@@ -4,38 +4,38 @@ const SIDEBAR_CONFIG = {
     logo: {
         icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2s-7 2-9 6a22 22 0 0 1-4 2"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5c1.08 1.45 4 2 4 2s-1.08-3.38 0-5c.9-.71 2-1 2-1"></path></svg>',
         text: 'NextStep AI',
-        href: 'index.html'
+        href: '/index.html'
     },
     mainNav: [
         {
             // Activity/TrendingUp (Dashboard)
             icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>',
             text: 'Dashboard',
-            href: 'dashboard.html'
+            href: '/pages/dashboard.html'
         },
         {
             // UserSquare (Resume)
             icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="12" cy="10" r="3"></circle><path d="M7 21v-2a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2"></path></svg>',
             text: 'Resume',
-            href: 'resume.html'
+            href: '/pages/resume.html'
         },
         {
             // Target (Skill Gap)
             icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>',
             text: 'Skill Gap',
-            href: 'skill-gap.html'
+            href: '/pages/skill-gap.html'
         },
         {
             // Mic2 (Interview)
             icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>',
             text: 'Interview',
-            href: 'interview.html'
+            href: '/pages/interview.html'
         },
         {
             // Milestone (Roadmap)
             icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h13l4-3.5L18 6Z"></path><path d="M12 13v8"></path><path d="M12 3v3"></path></svg>',
             text: 'Roadmap',
-            href: 'roadmap.html'
+            href: '/pages/roadmap.html'
         }
     ]
 };
@@ -43,7 +43,7 @@ const SIDEBAR_CONFIG = {
 function getCurrentPage() {
     const path = window.location.pathname;
     const page = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
-    return page;
+    return '/pages/' + page;
 }
 
 function generateSidebar() {
@@ -113,7 +113,7 @@ function generateSidebar() {
         </div>
         <nav class="sidebar-nav">
             ${SIDEBAR_CONFIG.mainNav.map(item => {
-                const isRoadmap = item.href === 'roadmap.html';
+                const isRoadmap = item.href === '/pages/roadmap.html';
                 const skillGapDone = localStorage.getItem('nextStep_skillGapCompleted') === 'true';
                 const isLocked = isRoadmap && !skillGapDone;
                 const lockClass = isLocked ? ' locked' : '';
@@ -142,13 +142,13 @@ function generateSidebar() {
             <div class="progress-track">
                 <div class="progress-track-fill" style="width: ${progress}%"></div>
             </div>
-            <a href="roadmap.html" class="progress-action-btn">
+            <a href="/pages/roadmap.html" class="progress-action-btn">
                 Resume Roadmap
             </a>
         </div>
 
         <div class="sidebar-footer">
-            <a href="profile.html" class="user-info-widget" style="text-decoration: none; cursor: pointer;">
+            <a href="/pages/profile.html" class="user-info-widget" style="text-decoration: none; cursor: pointer;">
                 <div class="user-avatar-widget" style="${userData.photoURL ? `background-image: url(${userData.photoURL}); font-size: 0;` : ''}">
                     ${userData.photoURL ? '' : userInitial}
                 </div>
@@ -176,7 +176,7 @@ function generateSidebar() {
 
     // Gate "Resume Roadmap" button too
     const skillGapDone = localStorage.getItem('nextStep_skillGapCompleted') === 'true';
-    const resumeBtn = document.querySelector('.progress-action-btn[href="roadmap.html"]');
+    const resumeBtn = document.querySelector('.progress-action-btn[href="/pages/roadmap.html"]');
     if (resumeBtn && !skillGapDone) {
         resumeBtn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -354,7 +354,7 @@ window.confirmLogout = function () {
     } catch (e) { console.log("AppState logout error", e); }
 
     // Redirect to landing page
-    window.location.href = 'index.html';
+    window.location.href = '/index.html';
 };
 
 // Toggle Sidebar Collapse/Expand

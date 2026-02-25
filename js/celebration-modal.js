@@ -100,7 +100,7 @@ function celebrateFirstInterview(score) {
         showConfetti: true,
         secondaryAction: 'View Roadmap',
         onSecondary: () => {
-            window.location.href = 'roadmap.html';
+            window.location.href = '/pages/roadmap.html';
         }
     });
 }

@@ -2,22 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://nextstep-ai-c721a.web.app/</loc>
-    <lastmod>2026-02-25</lastmod>
+    <lastmod>2026-02-26</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://nextstep-ai-c721a.web.app/auth.html</loc>
-    <lastmod>2026-02-25</lastmod>
+    <loc>https://nextstep-ai-c721a.web.app/pages/auth.html</loc>
+    <lastmod>2026-02-26</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://nextstep-ai-c721a.web.app/privacy-policy.html</loc>
-    <lastmod>2026-02-25</lastmod>
+    <loc>https://nextstep-ai-c721a.web.app/pages/privacy-policy.html</loc>
+    <lastmod>2026-02-26</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://nextstep-ai-c721a.web.app/terms-and-conditions.html</loc>
-    <lastmod>2026-02-25</lastmod>
+    <loc>https://nextstep-ai-c721a.web.app/pages/terms-and-conditions.html</loc>
+    <lastmod>2026-02-26</lastmod>
     <priority>0.3</priority>
   </url>
 </urlset>

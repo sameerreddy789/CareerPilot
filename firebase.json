@@ -16,7 +16,8 @@
       "design.md",
       "BUG_REPORT.md",
       "README.md",
-      "FIREBASE_SECURITY_RULES.md"
+      "FIREBASE_SECURITY_RULES.md",
+      "docs/**"
     ],
     "headers": [
       {
@@ -58,6 +59,10 @@
       {
         "source": "/",
         "destination": "/index.html"
+      },
+      {
+        "source": "/pages/**",
+        "destination": "/pages/404.html"
       }
     ]
   }

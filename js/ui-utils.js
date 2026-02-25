@@ -406,10 +406,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize keyboard shortcuts
     initKeyboardShortcuts({
         '?': showKeyboardShortcutsModal,
-        'd': () => window.location.href = 'dashboard.html',
-        'r': () => window.location.href = 'roadmap.html',
-        'i': () => window.location.href = 'interview.html',
-        'p': () => window.location.href = 'profile.html'
+        'd': () => window.location.href = '/pages/dashboard.html',
+        'r': () => window.location.href = '/pages/roadmap.html',
+        'i': () => window.location.href = '/pages/interview.html',
+        'p': () => window.location.href = '/pages/profile.html'
     });
 
     // Show first-visit hint

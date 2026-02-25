@@ -2,7 +2,9 @@ const CACHE_NAME = 'nextstep-v4';
 const STATIC_ASSETS = [
     '/',
     '/index.html',
-    '/favicon.svg'
+    '/favicon.svg',
+    '/pages/dashboard.html',
+    '/pages/auth.html'
 ];
 
 // Install - pre-cache minimal static assets

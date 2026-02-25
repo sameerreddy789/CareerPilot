@@ -82,13 +82,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Redirect based on progress
             if (data.roadmapGenerated) {
-                window.location.href = "dashboard.html";
+                window.location.href = "/pages/dashboard.html";
             } else if (data.interviewCompleted) {
-                window.location.href = "roadmap.html";
+                window.location.href = "/pages/roadmap.html";
             } else if (data.onboardingCompleted) {
-                window.location.href = "resume.html";
+                window.location.href = "/pages/resume.html";
             } else {
-                window.location.href = "onboarding.html";
+                window.location.href = "/pages/onboarding.html";
             }
         } else {
             // First time user (likely Google)
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             await setDoc(docRef, userData);
             localStorage.setItem('nextStep_user', JSON.stringify(userData));
-            window.location.href = "onboarding.html";
+            window.location.href = "/pages/onboarding.html";
         }
     }
 
@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
             await setDoc(doc(db, "users", user.uid), userData);
             localStorage.setItem('nextStep_user', JSON.stringify(userData));
 
-            window.location.href = "onboarding.html";
+            window.location.href = "/pages/onboarding.html";
 
         } catch (error) {
             console.error(error);

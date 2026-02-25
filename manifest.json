@@ -1,0 +1,17 @@
+{
+  "name": "NextStep AI",
+  "short_name": "NextStep",
+  "description": "AI-powered career guidance with resume analysis, mock interviews, and personalized learning roadmaps",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0F1419",
+  "theme_color": "#6366f1",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

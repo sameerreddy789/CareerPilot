@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             btn.disabled = true;
-            btn.textContent = "Creating Account...";
+            btn.innerHTML = `<span class="loading-spinner"></span> Creating Account...`;
 
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;

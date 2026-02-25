@@ -31,13 +31,27 @@
 
             // --- Roadmap Progress ---
             const completedTopics = appState.roadmapProgress?.completedTopics || [];
-            const roadmapSkills = appState.roadmap?.skills || [];
             let totalTopics = 0;
-            roadmapSkills.forEach(week => {
-                (week.topics || []).forEach(topic => {
-                    totalTopics += (topic.items || []).length;
+
+            // New format: weeks → topics → modules → subtopics
+            if (appState.roadmap?.weeks) {
+                appState.roadmap.weeks.forEach(week => {
+                    (week.topics || []).forEach(topic => {
+                        if (topic.modules && Array.isArray(topic.modules)) {
+                            topic.modules.forEach(mod => {
+                                totalTopics += (mod.subtopics || []).length;
+                            });
+                        } else if (topic.items && Array.isArray(topic.items)) {
+                            totalTopics += topic.items.length;
+                        }
+                    });
                 });
-            });
+            }
+            // Fallback: use totalTasks if stored
+            if (totalTopics === 0 && appState.roadmap?.totalTasks) {
+                totalTopics = appState.roadmap.totalTasks;
+            }
+
             const roadmapPct = totalTopics > 0 ? Math.round((completedTopics.length / totalTopics) * 100) : 0;
 
             const elTotalLearning = document.getElementById('stat-total-learning');

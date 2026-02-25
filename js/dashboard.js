@@ -664,7 +664,7 @@ function expandPulseDetail(dayData, panel, state) {
         itemsHTML = dayData.tasksOnDay.map(t => `
             <div class="detail-item">
                 <span class="detail-item-icon">✅</span>
-                <span>${t.title}</span>
+                <span>${typeof UIUtils !== 'undefined' ? UIUtils.escapeHTML(t.title) : t.title}</span>
             </div>
         `).join('');
     } else if (dayData.dayTotal > 0) {

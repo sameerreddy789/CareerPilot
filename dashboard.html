@@ -26,12 +26,13 @@
 </head>
 
 <body>
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
     <div class="app-container">
         <!-- Sidebar (populated by sidebar.js) -->
         <aside class="sidebar"></aside>
 
         <!-- Main Content -->
-        <main class="main-content">
+        <main class="main-content" id="main-content">
             <!-- Header -->
             <div class="dashboard-header">
                 <div>
@@ -171,7 +172,7 @@
                     <div class="card task-card-equal" id="personal-tasks-card">
                         <div class="card-header">
                             <h3 class="card-title">My To-Do</h3>
-                            <button class="add-icon-btn" onclick="openAddModal('task')">+</button>
+                            <button class="add-icon-btn" onclick="openAddModal('task')" aria-label="Add new task">+</button>
                         </div>
                         <div class="task-filter-tabs" id="personal-filter-tabs">
                             <button class="task-filter-tab active" data-filter="all"

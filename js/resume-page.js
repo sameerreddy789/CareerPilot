@@ -477,7 +477,7 @@ function showResults(data) {
         const tag = document.createElement('div');
         tag.className = 'skill-tag present animate-in';
         tag.style.animationDelay = `${index * 0.05}s`;
-        tag.innerHTML = `<span>✅</span> ${skill}`;
+        tag.innerHTML = `<span>✅</span> ${typeof UIUtils !== 'undefined' ? UIUtils.escapeHTML(skill) : skill}`;
         foundEl.appendChild(tag);
     });
 
@@ -489,7 +489,7 @@ function showResults(data) {
         const tag = document.createElement('div');
         tag.className = 'skill-tag missing animate-in';
         tag.style.animationDelay = `${((data.skills?.present?.length || 0) + index) * 0.05}s`;
-        tag.innerHTML = `<span>❌</span> ${skill}`;
+        tag.innerHTML = `<span>❌</span> ${typeof UIUtils !== 'undefined' ? UIUtils.escapeHTML(skill) : skill}`;
         missingEl.appendChild(tag);
     });
 

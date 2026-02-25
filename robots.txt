@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /js/env-config.js
+
+Sitemap: https://nextstep-ai-c721a.web.app/sitemap.xml

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nextstep-v4';
+const CACHE_NAME = 'nextstep-v5';
 const STATIC_ASSETS = [
     '/',
     '/index.html',

@@ -24,13 +24,14 @@ function getCookie(name) {
     const state = {
         onboarding: localStorage.getItem('nextStep_onboardingCompleted') === 'true',
         resume: !!localStorage.getItem('nextStep_resume'),
-        roadmap: localStorage.getItem('nextStep_roadmapCompleted') === 'true'
+        roadmap: localStorage.getItem('nextStep_roadmapCompleted') === 'true',
+        skillGap: localStorage.getItem('nextStep_skillGapCompleted') === 'true'
     };
 
     // 1. Strict Flow Enforcement
     // Sequence: Onboarding -> Resume -> Interview -> Dashboard/Roadmap
 
-    if (CURRENT_PAGE === 'dashboard.html' || CURRENT_PAGE === 'roadmap.html' || CURRENT_PAGE === 'studio.html') {
+    if (CURRENT_PAGE === 'dashboard.html' || CURRENT_PAGE === 'studio.html') {
         if (!state.onboarding) {
             window.location.href = 'onboarding.html';
             return;
@@ -40,9 +41,21 @@ function getCookie(name) {
             return;
         }
         if (!state.roadmap) {
-            // "Roadmap" flag is set after Interview + Roadmap Generation
-            // Redirect with restriction flag to show popup
             window.location.href = 'interview.html?restriction=1';
+            return;
+        }
+    } else if (CURRENT_PAGE === 'roadmap.html') {
+        if (!state.onboarding) {
+            window.location.href = 'onboarding.html';
+            return;
+        }
+        if (!state.resume) {
+            window.location.href = 'resume.html';
+            return;
+        }
+        // Allow roadmap if skill gap is completed (skills added to plan) OR roadmap already generated
+        if (!state.roadmap && !state.skillGap) {
+            window.location.href = 'skill-gap.html';
             return;
         }
     } else if (CURRENT_PAGE === 'interview.html' || CURRENT_PAGE === 'skill-gap.html' || CURRENT_PAGE === 'feedback.html') {

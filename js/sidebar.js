@@ -376,10 +376,59 @@ function initializeSidebarState() {
     }
 }
 
+// ===== Mobile Sidebar Toggle =====
+function injectMobileToggle() {
+    // Don't inject if already present
+    if (document.querySelector('.mobile-menu-toggle')) return;
+
+    // Hamburger button
+    const toggleBtn = document.createElement('button');
+    toggleBtn.className = 'mobile-menu-toggle';
+    toggleBtn.setAttribute('aria-label', 'Open navigation menu');
+    toggleBtn.innerHTML = '<div class="hamburger"><span></span><span></span><span></span></div>';
+    document.body.appendChild(toggleBtn);
+
+    // Overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'sidebar-overlay';
+    document.body.appendChild(overlay);
+
+    // Toggle handler
+    toggleBtn.addEventListener('click', () => {
+        const sidebar = document.querySelector('.sidebar');
+        const isOpen = sidebar.classList.toggle('open');
+        toggleBtn.classList.toggle('active', isOpen);
+        overlay.classList.toggle('active', isOpen);
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+
+    // Close on overlay click
+    overlay.addEventListener('click', () => {
+        const sidebar = document.querySelector('.sidebar');
+        sidebar.classList.remove('open');
+        toggleBtn.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    });
+
+    // Close sidebar on nav link click (mobile)
+    document.addEventListener('click', (e) => {
+        const link = e.target.closest('.sidebar-link');
+        if (link && window.innerWidth <= 768) {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.remove('open');
+            toggleBtn.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+}
+
 // Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
     // Wait for AppState if possible, or render immediately
     generateSidebar();
+    injectMobileToggle();
 
     // Subscribe to AppState updates
     appState.subscribe(() => {

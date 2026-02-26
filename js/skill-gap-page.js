@@ -403,15 +403,21 @@ function updateRoadmapGate() {
     }
 
     // Update sidebar Roadmap link if it exists on this page
-    const roadmapLink = document.querySelector('.sidebar-link[href="/pages/roadmap.html"]');
+    const roadmapLink = document.querySelector('.sidebar-link[data-tooltip="Roadmap"]');
     if (roadmapLink) {
         if (hasSkills) {
             roadmapLink.classList.remove('locked');
             roadmapLink.removeAttribute('title');
+            roadmapLink.removeAttribute('data-locked');
+            roadmapLink.href = '/pages/roadmap.html';
             roadmapLink.onclick = null;
+            // Remove lock icon if present
+            const lockIcon = roadmapLink.querySelector('.lock-icon');
+            if (lockIcon) lockIcon.remove();
         } else {
             roadmapLink.classList.add('locked');
             roadmapLink.setAttribute('title', 'Complete Skill Gap Analysis first');
+            roadmapLink.href = '#';
             roadmapLink.onclick = (e) => {
                 e.preventDefault();
                 if (window.showToast) window.showToast('Add skills to your plan from Skill Gap Analysis first', 'info');

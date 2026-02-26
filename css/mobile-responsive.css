@@ -1,14 +1,14 @@
 /**
- * Mobile Optimization
- * Hamburger menu and mobile-friendly enhancements
+ * Mobile Responsive — Full Overhaul
+ * Fixes layout, overflow, sidebar, buttons, grids for ≤768px
  */
 
-/* Mobile Menu Toggle */
+/* ===== Sidebar Mobile Toggle ===== */
 .mobile-menu-toggle {
     display: none;
     position: fixed;
-    top: 20px;
-    left: 20px;
+    top: 16px;
+    left: 16px;
     z-index: 1001;
     width: 44px;
     height: 44px;
@@ -18,6 +18,8 @@
     cursor: pointer;
     backdrop-filter: blur(10px);
     transition: all 0.3s ease;
+    align-items: center;
+    justify-content: center;
 }
 
 .mobile-menu-toggle:hover {
@@ -47,16 +49,14 @@
 .mobile-menu-toggle.active .hamburger span:nth-child(1) {
     transform: translateY(6px) rotate(45deg);
 }
-
 .mobile-menu-toggle.active .hamburger span:nth-child(2) {
     opacity: 0;
 }
-
 .mobile-menu-toggle.active .hamburger span:nth-child(3) {
     transform: translateY(-6px) rotate(-45deg);
 }
 
-/* Mobile sidebar overlay */
+/* Sidebar overlay */
 .sidebar-overlay {
     display: none;
     position: fixed;
@@ -64,112 +64,413 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(4px);
-    z-index: 999;
+    z-index: 99;
     animation: fadeIn 0.3s ease;
 }
+.sidebar-overlay.active { display: block; }
 
-.sidebar-overlay.active {
-    display: block;
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
+/* ===== MOBILE: ≤768px ===== */
 @media (max-width: 768px) {
+
+    /* Show hamburger */
     .mobile-menu-toggle {
         display: flex;
-        align-items: center;
-        justify-content: center;
     }
 
+    /* Sidebar off-screen by default */
     .sidebar {
+        position: fixed;
         transform: translateX(-100%);
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 100;
+        width: 260px;
     }
-
     .sidebar.open {
         transform: translateX(0);
         box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
     }
 
+    /* Main content fills screen */
     .main-content {
         margin-left: 0 !important;
-        padding: var(--spacing-lg);
+        padding: 16px !important;
+        padding-top: 68px !important;
+        width: 100%;
+        min-width: 0;
+        overflow-x: hidden;
     }
 
-    /* Touch-friendly buttons */
-    .btn,
-    button,
-    a {
-        min-height: 44px;
-        min-width: 44px;
+    /* Page headers stack */
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
     }
 
-    /* Larger tap targets for mobile */
-    .sidebar-link {
+    .page-title {
+        font-size: 22px;
+    }
+
+    /* Dashboard header */
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .dashboard-header .header-actions {
+        width: 100%;
+    }
+
+    .dashboard-header .header-actions .btn {
+        width: 100%;
+    }
+
+    /* Stats row — 2 columns on mobile */
+    .stats-row {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .stat-card-new {
+        min-width: 0 !important;
+    }
+
+    /* Dashboard content columns stack */
+    .dashboard-content {
+        flex-direction: column !important;
+    }
+
+    .dash-col:first-child,
+    .dash-col:last-child {
+        flex: 1 1 auto;
+    }
+
+    /* Task cards — auto height on mobile */
+    .task-card-equal,
+    #assigned-tasks-card.task-card-equal {
+        max-height: none;
+        min-height: auto;
+    }
+
+    /* Cards — reduce padding */
+    .card {
         padding: 16px;
-        font-size: 16px;
     }
 
-    /* Stack footer on mobile */
-    .footer-main {
+    /* Momentum timeline — smaller rings */
+    .pulse-ring {
+        width: 30px;
+        height: 30px;
+    }
+    .pulse-count { font-size: 10px; }
+    .pulse-day-label { font-size: 9px; }
+
+    /* Readiness chart — smaller */
+    .pie-chart-container {
+        width: 180px;
+        height: 180px;
+    }
+    .pie-center-content {
+        width: 100px;
+        height: 100px;
+    }
+    .pie-value { font-size: 32px; }
+
+    /* Modals full width */
+    .modal-content,
+    .custom-modal {
+        width: 92% !important;
+        max-width: 92% !important;
+        margin: 16px auto;
+    }
+
+    /* ===== Interview Page ===== */
+    .interview-layout {
+        flex-direction: column !important;
+    }
+
+    .left-panel,
+    .right-panel {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .interview-actions.bottom-right {
         flex-direction: column;
-        gap: var(--spacing-lg);
-        text-align: center;
+        gap: 10px;
     }
 
-    /* Full width modals on mobile */
-    .modal,
-    .custom-modal,
-    .auth-card {
-        width: 95% !important;
-        max-width: 95% !important;
-        margin: var(--spacing-lg);
+    .interview-actions .btn {
+        width: 100%;
     }
 
-    /* Bottom navigation alternative */
-    .mobile-bottom-nav {
-        display: flex;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 64px;
-        background: rgba(35, 41, 55, 0.98);
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        z-index: 998;
-        justify-content: space-around;
-        padding: 0 var(--spacing-md);
+    /* ===== Resume Page ===== */
+    .resume-layout,
+    .resume-grid {
+        grid-template-columns: 1fr !important;
     }
 
-    .mobile-nav-item {
-        flex: 1;
-        display: flex;
+    /* ===== Skill Gap Page ===== */
+    .analysis-hero {
+        grid-template-columns: 1fr !important;
+    }
+
+    .skill-grid,
+    .skills-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .role-input-container {
+        width: 100% !important;
+    }
+
+    /* Explorer drawer full width on mobile */
+    .explorer-drawer {
+        width: 100% !important;
+        right: -100% !important;
+    }
+    .explorer-drawer.active {
+        right: 0 !important;
+    }
+
+    /* ===== Roadmap Page ===== */
+    .roadmap-overview {
+        flex-direction: column !important;
+    }
+
+    .roadmap-header {
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 4px;
-        color: var(--text-secondary);
-        font-size: 11px;
-        text-decoration: none;
-        transition: color 0.2s ease;
+        align-items: flex-start;
+        gap: 12px;
     }
 
-    .mobile-nav-item.active {
-        color: var(--accent-primary);
+    /* ===== Profile Page ===== */
+    .profile-layout {
+        flex-direction: column !important;
+        gap: 16px;
     }
 
-    .mobile-nav-icon {
+    .profile-sidebar-card {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .profile-main-content {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .overview-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .progress-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .progress-mini-card {
+        width: 100%;
+    }
+
+    .social-showcase-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Heatmap scroll on mobile */
+    .heatmap-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .heatmap-graph {
+        min-width: 700px;
+    }
+
+    /* ===== Feedback Page ===== */
+    .feedback-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* ===== Auth Page ===== */
+    .auth-container {
+        flex-direction: column;
+    }
+
+    .auth-sidebar {
+        padding: 24px 16px;
+    }
+
+    .auth-hero {
+        display: none !important;
+    }
+
+    .auth-form-wrap {
+        max-width: 100%;
+    }
+
+    /* ===== Index / Landing Page ===== */
+    .hero {
+        min-height: auto;
+        padding: 100px 16px 60px;
+    }
+
+    .hero-title {
+        font-size: clamp(28px, 8vw, 48px) !important;
+    }
+
+    .hero-subtitle {
+        font-size: 15px !important;
+        padding: 0 8px;
+    }
+
+    .hero-cta {
+        flex-direction: column;
+        width: 100%;
+        padding: 0 8px;
+    }
+
+    .hero-cta .btn {
+        width: 100%;
+    }
+
+    .features-highlights {
+        padding: 60px 0;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px;
+    }
+
+    .feat-header {
+        padding: 24px 20px 16px;
+    }
+
+    .feat-body {
+        padding: 0 20px 24px;
+    }
+
+    .feat-title {
         font-size: 20px;
     }
 
-    /* Adjust content for bottom nav */
-    body.has-mobile-nav .main-content {
-        padding-bottom: 80px;
+    /* Steps slider */
+    .steps3d-stage {
+        height: auto !important;
+    }
+
+    /* FAQ */
+    .faq-container {
+        max-width: 100%;
+    }
+
+    .faq-trigger {
+        padding: 14px 16px;
+    }
+
+    .faq-question {
+        font-size: 14px;
+        padding-right: 16px;
+    }
+
+    /* Footer */
+    .footer-grid {
+        grid-template-columns: 1fr !important;
+        gap: 24px;
+    }
+
+    .footer-bottom-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+    }
+
+    /* Back to top */
+    .back-to-top {
+        bottom: 20px;
+        right: 20px;
+    }
+
+    /* ===== Global Touch Targets ===== */
+    .btn,
+    button:not(.hamburger span),
+    .sidebar-link {
+        min-height: 44px;
+    }
+
+    /* Prevent horizontal overflow everywhere */
+    html, body {
+        overflow-x: hidden;
+    }
+
+    /* Legal pages */
+    .legal-content {
+        padding: 16px !important;
+    }
+
+    .legal-nav {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    /* Onboarding */
+    .wizard-card {
+        padding: 20px 16px;
+    }
+
+    .options-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .step-title {
+        font-size: 20px;
+    }
+
+    /* Celebration modal */
+    .celebration-modal {
+        width: 92% !important;
+        max-width: 92% !important;
+        padding: 24px 16px;
     }
 }
 
-/* Tablet adjustments */
+/* ===== SMALL MOBILE: ≤480px ===== */
+@media (max-width: 480px) {
+    .stats-row {
+        grid-template-columns: 1fr !important;
+    }
+
+    .options-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-title {
+        font-size: 26px !important;
+    }
+
+    .pie-chart-container {
+        width: 150px;
+        height: 150px;
+    }
+    .pie-center-content {
+        width: 80px;
+        height: 80px;
+    }
+    .pie-value { font-size: 24px; }
+    .pie-label { font-size: 8px; letter-spacing: 1.5px; }
+}
+
+/* ===== TABLET: 769px–1024px ===== */
 @media (min-width: 769px) and (max-width: 1024px) {
     .sidebar {
         width: 220px;
@@ -177,5 +478,17 @@
 
     .main-content {
         margin-left: 220px;
+    }
+
+    .sidebar.collapsed ~ .main-content {
+        margin-left: 70px;
+    }
+
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stats-row {
+        grid-template-columns: repeat(2, 1fr);
     }
 }

@@ -2940,20 +2940,4 @@ textarea:focus-visible,
     outline-offset: 2px;
 }
 
-/* Skip to main content link (screen reader accessible) */
-.skip-to-main {
-    position: absolute;
-    top: -100%;
-    left: 16px;
-    z-index: 100000;
-    padding: 12px 24px;
-    background: var(--accent-primary, #6366f1);
-    color: #fff;
-    border-radius: 8px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: top 0.2s;
-}
-.skip-to-main:focus {
-    top: 16px;
-}
+

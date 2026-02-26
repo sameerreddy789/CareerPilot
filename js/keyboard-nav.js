@@ -17,9 +17,6 @@ class KeyboardNav {
 
         // Tab trap for modals
         this.setupModalTabTrap();
-
-        // Skip to content link
-        this.addSkipLink();
     }
 
     handleKeyPress(e) {
@@ -121,41 +118,6 @@ class KeyboardNav {
         });
     }
 
-    addSkipLink() {
-        if (document.querySelector('.skip-link')) return;
-
-        const skipLink = document.createElement('a');
-        skipLink.href = '#main-content';
-        skipLink.className = 'skip-link';
-        skipLink.textContent = 'Skip to main content';
-
-        const style = document.createElement('style');
-        style.textContent = `
-            .skip-link {
-                position: absolute;
-                top: -40px;
-                left: 0;
-                background: var(--accent-primary);
-                color: white;
-                padding: 8px 16px;
-                text-decoration: none;
-                z-index: 100000;
-                border-radius: 0 0 4px 0;
-            }
-            
-            .skip-link:focus {
-                top: 0;
-            }
-        `;
-        document.head.appendChild(style);
-        document.body.insertBefore(skipLink, document.body.firstChild);
-
-        // Add ID to main content if doesn't exist
-        const mainContent = document.querySelector('.main-content, main');
-        if (mainContent && !mainContent.id) {
-            mainContent.id = 'main-content';
-        }
-    }
 }
 
 // Initialize
